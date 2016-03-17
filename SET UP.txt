@@ -1,0 +1,16 @@
+SET UP
+
+Set up Mongo first
+
+Make sure to change php.ini (add: extension=mongo.so) 
+Download my sample db file if needed.
+
+Troubleshoot:
+MongoClient uses localhost
+
+
+
+Prior to running:
+1. Run the server (I use apache web server from Manager-osx)
+2. Run mongo (Command Line: mongod)
+3. Run test.html
