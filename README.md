@@ -1,5 +1,37 @@
 READ ME
 
+Directory ===============================================================
+
+	[Login]
+		Checks login of students, TA, or instructor
+
+		Files:
+			1. CheckLogin.php
+			2. CheckGrader.php
+			3. CheckInstructor.php 
+			4. Instructor.txt
+
+			Note: Instructor.txt has list of instructor IDs
+
+	[Sample]
+		Sample files to make it easier
+
+		Files:
+			1. Roster.txt
+			2. Quiz.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
 TODO (Backend):
 	1. Python - unique name and chmod, feedback filter (Michael)
 	2. Klobbering (Both)
