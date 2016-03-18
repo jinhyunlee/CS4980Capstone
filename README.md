@@ -9,9 +9,11 @@ Directory ===============================================================
 			1. CheckLogin.php
 			2. CheckGrader.php
 			3. CheckInstructor.php 
-			4. Instructor.txt
+			4. Instructors.txt
+			5. NetBadge.php
+			6. Sessions.php
 
-			Note: Instructor.txt has list of instructor IDs
+			Note: Instructors.txt has list of instructor IDs
 
 	[Sample]
 		Sample files to make it easier
@@ -20,13 +22,269 @@ Directory ===============================================================
 			1. Roster.txt
 			2. Quiz.txt
 
+	[TeacherBackend]
+		Teacher's portal
+
+		Files:
+			1. CreateNote.php
+			2. CreateQuiz.php
+			3. CreateRoster.php
+			4. EditNote.php
+			5. EditQuiz.php
+			6. EditRoster.php
+			7. ViewNote.php
+			8. ViewQuiz.php
+			9. ViewRoster.php
 
 
 
 
+NetBadge.php ==============================================================
+
+	[Unknown]
+
+	Provides identification
+
+		id 				<string>
+		IPAddress 		<string>
 
 
+Sessions.php ==============================================================
 
+	Provides global variables about sessions and sets up Mongo
+
+		MyteacherID 		<string> 			*
+		MystudentID 	<string>			*
+		isTeacher 		<bool> 				//Instructor
+		isStudent 		<bool> 				//Student
+		isGrader 		<bool> 				//TA or Instructor
+
+		db 				[MONGO]
+
+	Also provides output for Front End for only Errors
+
+		object
+
+			success 	<bool>
+			message 	<list-str>
+
+	TODO?: Make sessions
+
+
+CheckLoginGrader.php =========================================================
+
+	Check if it is grader or a TA
+
+	sets the session.php variables
+
+	output for Front End for only errors
+
+		object
+
+			success 	<bool>
+			message 	<list-str>
+
+
+ViewQuiz.php =========================================================
+
+	View Quiz information
+
+	[Input]
+		quizID 			<string> 
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+		classID 		<string> 		// Class ID
+		quizName 		<string> 		// Quiz Title
+		timeAllowed 	<int> 			// Minutes allowed
+		retake 			<int> 			// How many times can you retake
+
+		language 		<string> 		// Programming Language of the quiz
+
+		question 		<list-str>
+		numSubmission 	<list-int> 		// Number of Submission allowed for Q
+		answer 			<list-str> 		// Answer Code by Instructor to run
+
+		sectionNumber 	<list-int> 		// Section Number
+		beginTime 		<list-time>  	// When can you take the quiz
+		beginDate 		<list-date> 	// " 			"
+		lateTime 		<list-time> 	// When will it be considered late
+		lateDate 		<list-date> 	// " 			"
+		endTime 		<list-time> 	// When will it be closed permanantly
+		endDate 		<list-date> 	// " 			"
+
+	NOTE: Need to change style of database and language to list
+
+ViewRoster.php =========================================================
+
+	View Roster Information
+
+	[Input]
+		classID 		<string>
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+		studentName 	<list-str>
+		studentID 		<list-str>
+		sectionNumber 	<list-int> 		
+		extraTime 		<list-double> 	// Extra time multiplier
+		email 			<list-str>
+		ta 				<list-bool> 	// Is it a TA
+
+ViewNote.php ==============================================================
+
+	View Note Information
+
+	[Input]
+		quizID 			<string>
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+		studentID 		<list-str>
+		notes	 		<list-str> 		
+		lateAllowed		<list-bool> 	// Alllowed to be overtime?
+		exitAllowed		<list-bool> 	// Alllowed to exit?
+		moreAllowed		<list-bool> 	// Alllowed to submit more?
+		retakeAllowed	<list-bool> 	// Alllowed to be retake more?
+		lateDateAllowed <list-bool> 	// Allowed to be late?
+
+CreateQuiz.php ============================================================
+
+	Create Quiz - Only Happy Case
+
+	[Input]
+		classID 		<string> 		// Class ID
+		quizName 		<string> 		// Quiz Title
+		timeAllowed 	<int> 			// Minutes allowed
+		retake 			<int> 			// How many times can you retake
+
+		language 		<string> 		// Programming Language of the quiz
+
+		question 		<list-str>
+		numSubmission 	<list-int> 		// Number of Submission allowed for Q
+		answer 			<list-str> 		// Answer Code by Instructor to run
+
+		sectionNumber 	<list-int> 		// Section Number
+		beginTime 		<list-time>  	// When can you take the quiz
+		beginDate 		<list-date> 	// " 			"
+		lateTime 		<list-time> 	// When will it be considered late
+		lateDate 		<list-date> 	// " 			"
+		endTime 		<list-time> 	// When will it be closed permanantly
+		endDate 		<list-date> 	// " 			"
+
+	[Output]
+		quizID 			<string> 
+		success 		<bool>
+		message 		<list-str>
+
+CreateRoster.php ============================================================
+
+	Create Roster - Happy Case
+
+	[Input]
+		classID 		<string>
+		studentName 	<list-str>
+		studentID 		<list-str>
+		sectionNumber 	<list-int> 		
+		extraTime 		<list-double> 	// Extra time multiplier
+		email 			<list-str>
+		ta 				<list-bool> 	// Is it a TA
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+CreateNote.php ============================================================
+
+	Create Note - Happy Case
+
+	[Input]
+		quizID 			<string>
+		studentID 		<list-str>
+		notes	 		<list-str> 		
+		lateAllowed		<list-bool> 	// Alllowed to be overtime?
+		exitAllowed		<list-bool> 	// Alllowed to exit?
+		moreAllowed		<list-bool> 	// Alllowed to submit more?
+		retakeAllowed	<list-bool> 	// Alllowed to be retake more?
+		lateDateAllowed <list-bool> 	// Allowed to be late?
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+		
+EditQuiz.php ============================================================
+
+	Edit Quiz - Only Happy Case
+
+	[Input]
+		quizID 			<string> 
+		classID 		<string> 		// Class ID
+		quizName 		<string> 		// Quiz Title
+		timeAllowed 	<int> 			// Minutes allowed
+		retake 			<int> 			// How many times can you retake
+
+		language 		<string> 		// Programming Language of the quiz
+
+		question 		<list-str>
+		numSubmission 	<list-int> 		// Number of Submission allowed for Q
+		answer 			<list-str> 		// Answer Code by Instructor to run
+
+		sectionNumber 	<list-int> 		// Section Number
+		beginTime 		<list-time>  	// When can you take the quiz
+		beginDate 		<list-date> 	// " 			"
+		lateTime 		<list-time> 	// When will it be considered late
+		lateDate 		<list-date> 	// " 			"
+		endTime 		<list-time> 	// When will it be closed permanantly
+		endDate 		<list-date> 	// " 			"
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+
+		NOTE: All edit must be ATOMIC
+
+EditRoster.php ============================================================
+
+	Edit Roster - Happy Case
+
+	[Input]
+		classID 		<string>
+		studentName 	<list-str>
+		studentID 		<list-str>
+		sectionNumber 	<list-int> 		
+		extraTime 		<list-double> 	// Extra time multiplier
+		email 			<list-str>
+		ta 				<list-bool> 	// Is it a TA
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
+
+EditNote.php ============================================================
+
+	Edit Note - Happy Case
+
+	[Input]
+		quizID 			<string>
+		studentID 		<list-str>
+		notes	 		<list-str> 		
+		lateAllowed		<list-bool> 	// Alllowed to be overtime?
+		exitAllowed		<list-bool> 	// Alllowed to exit?
+		moreAllowed		<list-bool> 	// Alllowed to submit more?
+		retakeAllowed	<list-bool> 	// Alllowed to be retake more?
+		lateDateAllowed <list-bool> 	// Allowed to be late?
+
+	[Output]
+		success 		<bool>
+		message 		<list-str>
 
 
 

@@ -1,3 +1,54 @@
 If you want to test with same data I have
 
 
+
+
+Question 1: 
+
+Write a method called 'five' with no parameter that returns an int "5" 
+
+ANSWER 1: 
+
+#include <stdio.h>
+
+int main() {
+       printf("Five in number is %d", five());
+       if (five() != 5) {
+           printf("Failed");
+       }
+       else {
+           printf("Success");
+       }
+       return 0;
+}
+
+CODE 1:
+
+int five() {
+	return 5;
+}
+
+QUESTION 2:
+
+Write a method called 'three' with no parameter that returns an int "3" 
+
+ANSWER 2:
+
+#include <stdio.h>
+
+int main() {
+       printf("Three  in number is %d", three());
+       if (three() != 3) {
+           printf("Failed");
+       }
+       else {
+           printf("Success");
+       }
+       return 0;
+}
+
+CODE 2:
+
+int three() {
+	return 3;
+}

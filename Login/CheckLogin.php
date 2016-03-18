@@ -1,76 +1,65 @@
 <?php
 
-	$id = "a"; // STUDENT
-	//$id = "c"; // TA
-	//$id = "0"; // PROFESSOR
+	require "NetBadge.php";
+	require "Sessions.php";
 
-	if ($id == "0") {
-		$teacherID = "0";
-		$studentID = "0";
-	}
-	else {
+	require "CheckInstructor.php";
 
-		$mongo = new MongoClient(); 
-		$db = $mongo->selectDB("capstone");
-		$cursor = $db->quizzes->find(array("quizID" => $quizID));
+	// If its not the teacher
+	if (!$isTeacher) {
+		// Find the quiz
+		$cursor = $db->quizzes->find(array(
+			"quizID" => $quizID
+			));
 
 		if ($cursor->count() > 0) {
-
+			// Find the class ID
 			foreach ($cursor as $document) {
 				$classID = $document["classID"];
+				continue;
 			}
 		}
 		else {
 			$object["success"] = false;
-			$object["message"] = "Quiz not found";
-
+			$object["message"][] = "Quiz not found";
 			echo json_encode($object);
 			exit;
 		}
 
+		// Find the student
 		$cursor = $db->roster->find(array(
 			"studentID" => $id,
-			"classID" => $classID));
+			"classID" => $classID
+			));
 
 		if ($cursor->count() > 0) {
-
-			$extraTime = 1;
 			foreach ($cursor as $document) {
-				$ta = $document["ta"];
-				$studentID = $document["studentID"];
-				$studentName = $document["studentName"];
+				$Myta = $document["ta"];
+				$MystudentID = $document["studentID"];
+				$MystudentName = $document["studentName"];
 				$MysectionNumber = $document["sectionNumber"];
-				$extraTime = intval($document["extraTime"]);
-				$email = $document["email"];
-				$ta = $document["ta"];
-
+				$MyextraTime = $document["extraTime"];
+				$Myemail = $document["email"];
 			}
 		}
 		else {
 			$object["success"] = false;
-			$object["message"] = "id not found";
-
+			$object["message"][] = "id not found";
 			echo json_encode($object);
 			exit;
 		}
 
 		$cursor = $db->allowed->find(array(
-			"studentID" => $id,
+			"studentID" => $studentID,
 			"quizID" => $quizID));
 
 		if ($cursor->count() > 0) {
-
 			foreach ($cursor as $document) {
-				$retakeAllowed = $document["retakeAllowed"];
+				$MyretakeAllowed = $document["retakeAllowed"];
 			}
 		}
 		else {
-			$retakeAllowed = "false";
+			$MyretakeAllowed = false;
 		}
-		
-
 	}
-
-
-
 ?>

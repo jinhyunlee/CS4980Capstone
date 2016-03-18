@@ -1,21 +1,20 @@
 <?php
 
-	//$id = "a"; // STUDENT
-	//$id = "c"; // TA
-	$id = "0"; // PROFESSOR
+	require "NetBadge.php";
+	require "Sessions.php";
 
-	if ($id == "0") {
-		$teacherID = "0";
+	require "CheckInstructor.php";
+
+	if ($isTeacher) {
+		$object["success"] = true;
+		$object["message"][] = "This is the teacher";
 	}
 	else {
-
 		$object["success"] = false;
-		$object["message"] = "id not an instructor";
+		$object["message"][] = "id not an instructor";
 
 		echo json_encode($object);
 		exit;
 	}
-
-
 
 ?>
