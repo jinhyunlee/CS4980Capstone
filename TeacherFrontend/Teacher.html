@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			$(document).ready(function() {
+				$("#createRosterButton").click(function() {
+					$("#createRosterSpan").append($("#createRosterDiv").html());
+				});
+
+				$("#editRosterButton").click(function() {
+					$("#editRosterSpan").append($("#editRosterDiv").html());
+				});
+
+				$("#createQuizButton1").click(function() {
+					$("#createQuizSpan1").append($("#createQuizDiv1").html());
+				});
+
+				$("#createQuizButton2").click(function() {
+					$("#createQuizSpan2").append($("#createQuizDiv2").html());
+				});
+
+				$("#editQuizButton1").click(function() {
+					$("#editQuizSpan1").append($("#editQuizDiv1").html());
+				});
+
+				$("#editQuizButton2").click(function() {
+					$("#editQuizSpan2").append($("#editQuizDiv2").html());
+				});
+
+				$("#createNoteButton").click(function() {
+					$("#createNoteSpan").append($("#createNoteDiv").html());
+				});
+
+				$("#editNoteButton").click(function() {
+					$("#editNoteSpan").append($("#editNoteDiv").html());
+				});
+
+				$("#viewRosterButton").click(function() {
+					$.ajax({
+						type: "POST",
+						url: "../TeacherBackend/ViewRoster.php",
+						data: {
+							classID: $("#viewRosterClassID").val()
+						},
+						dataType: "json",
+						success: function(data) {
+							alert(JSON.stringify(data));
+							$("#output").text(JSON.stringify(data));
+						}
+					})
+				});
+
+				$("#viewQuizButton").click(function() {
+					$.ajax({
+						type: "POST",
+						url: "../TeacherBackend/ViewQuiz.php",
+						data: {
+							quizID: $("#viewQuizID").val()
+						},
+						dataType: "json",
+						success: function(data) {
+							alert(JSON.stringify(data));
+							$("#output").text(JSON.stringify(data));
+						}
+					})
+				});
+
+				$("#viewNoteButton").click(function() {
+					$.ajax({
+						type: "POST",
+						url: "../TeacherBackend/ViewNote.php",
+						data: {
+							quizID: $("#viewNoteID").val()
+						},
+						dataType: "json",
+						success: function(data) {
+							alert(JSON.stringify(data));
+							$("#output").text(JSON.stringify(data));
+						}
+					})
+				});
+			});
+		</script>
+
+		<br/>
+		CREATE ROSTER ===========================================================
+
+		<form action="../TeacherBackend/CreateRoster.php" method="post">
+			<input type="text" placeholder="class id" name="classID">
+
+			<div id="createRosterDiv">
+			<input type="text" placeholder="section number" name="sectionNumber[]">
+			<input type="text" placeholder="student id" name="studentID[]">
+			<input type="text" placeholder="extra time" name="extraTime[]">
+			<input type="text" placeholder="student name" name="studentName[]">
+			<input type="text" placeholder="email" name="email[]">
+			<input type="text" placeholder="ta" name="ta[]">
+			<br/>
+			</div>
+			<span id="createRosterSpan"> </span>
+			<button id="createRosterButton" type="button"> Add more </button>
+			<input type="submit" value="Create Roster">
+		</form>
+
+		<br/>
+		<br/>
+		VIEW ROSTER ==========================================================
+		<br/>
+
+		<input id="viewRosterClassID" placeholder="class id">
+		<button id="viewRosterButton"> View Roster </button>
+
+		<br/>
+		<br/>
+		EDIT ROSTER ============================================================
+		<br/>
+
+		<form action="../TeacherBackend/EditRoster.php" method="post">
+			<input type="text" placeholder="class id" name="classID">
+
+			<div id="editRosterDiv">
+			<input type="text" placeholder="section number" name="sectionNumber[]">
+			<input type="text" placeholder="student id" name="studentID[]">
+			<input type="text" placeholder="extra time" name="extraTime[]">
+			<input type="text" placeholder="student name" name="studentName[]">
+			<input type="text" placeholder="email" name="email[]">
+			<input type="text" placeholder="ta" name="ta[]">
+			<br/>
+			</div>
+			<span id="editRosterSpan"> </span>
+			<button id="editRosterButton" type="button"> Add more </button>
+			<input type="submit" value="Edit Roster">
+		</form>
+			
+		<br/>
+		<br/>
+		CREATE QUIZ ============================================================
+		<br/>
+
+		<form action="../TeacherBackend/CreateQuiz.php" method="post">
+			<input type="text" placeholder="class id" name="classID">
+			<input type="text" placeholder="quiz name" name="quizName">
+			<input type="text" placeholder="time allowed" name="timeAllowed">
+			<input type="text" placeholder="language" name="language">
+			<input type="text" placeholder="retake amount" name="retake">
+			<br/>
+			<br/>
+
+			<div id="createQuizDiv1">
+			<input type="text" placeholder="num submission" name="numSubmission[]">
+			<br/>
+			<textarea placeholder="question" name="question[]" rows="10" cols="60"></textarea>
+			<textarea placeholder="answer code" name="answer[]" rows="10" cols="60"></textarea>
+			<br/>
+			<br/>
+			</div>
+			<span id="createQuizSpan1"> </span>
+			<button id="createQuizButton1" type="button"> Add more questions</button>
+			<div id="createQuizDiv2">
+			<input type="text" placeholder="section number" name="sectionNumber[]">
+			<br/>
+			Begin Datetime: 
+			<input type="date" name="beginDate[]">
+			<input type="time" name="beginTime[]">
+			<br/>
+			Late Datetime: 
+			<input type="date" name="lateDate[]">
+			<input type="time" name="lateTime[]">
+			<br/>
+			End Datetime:
+			<input type="date" name="endDate[]">
+			<input type="time" name="endTime[]">
+			<br/>
+			<br/>
+			</div>
+			<span id="createQuizSpan2"> </span>
+			<button id="createQuizButton2" type="button"> Add more sections </button>
+			<input type="submit" value="Create Quiz">
+		</form>
+
+
+		<br/>
+		<br/>
+		VIEW QUIZ ==========================================================
+		<br/>
+
+		<input id="viewQuizID" placeholder="quiz id">
+		<button id="viewQuizButton"> View Quiz </button>
+
+		<br/>
+		<br/>
+		EDIT QUIZ ============================================================
+		<br/>
+
+		<form action="../TeacherBackend/EditQuiz.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID">
+			<input type="text" placeholder="class id" name="classID">
+			<input type="text" placeholder="quiz name" name="quizName">
+			<input type="text" placeholder="time allowed" name="timeAllowed">
+			<input type="text" placeholder="language" name="language">
+			<input type="text" placeholder="retake amount" name="retake">
+			<br/>
+			<br/>
+
+			<div id="editQuizDiv1">
+			<input type="text" placeholder="num submission" name="numSubmission[]">
+			<br/>
+			<textarea placeholder="question" name="question[]" rows="10" cols="60"></textarea>
+			<textarea placeholder="answer code" name="answer[]" rows="10" cols="60"></textarea>
+			<br/>
+			<br/>
+			</div>
+			<span id="editQuizSpan1"> </span>
+			<button id="editQuizButton1" type="button"> Add more questions</button>
+			<div id="editQuizDiv2">
+			<input type="text" placeholder="section number" name="sectionNumber">
+			<br/>
+			Begin Datetime: 
+			<input type="date" name="beginDate">
+			<input type="time" name="beginTime">
+			<br/>
+			Late Datetime: 
+			<input type="date" name="lateDate">
+			<input type="time" name="lateTime">
+			<br/>
+			End Datetime:
+			<input type="date" name="endDate">
+			<input type="time" name="endTime">
+			<br/>
+			<br/>
+			</div>
+			<span id="editQuizSpan2"> </span>
+			<button id="editQuizButton2" type="button"> Add more sections </button>
+			<input type="submit" value="Edit Quiz">
+		</form>
+
+		<br/>
+		<br/>
+		CREATE NOTE ============================================================
+		<br/>
+
+		<form action="../TeacherBackend/CreateNote.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID">
+			<br/>
+
+			<div id="createNoteDiv">
+			<input type="text" placeholder="student ID" name="studentID[]">
+			<br/>
+			<textarea placeholder="notes" name="notes[]" rows="10" cols="60"></textarea>
+			<br/>
+			<input type="text" placeholder="retake allowed (strictly enforced)" name="retakeAllowed[]">
+			<br/>
+			<input type="text" placeholder="extended time allowed" name="lateAllowed[]">
+			<br/>
+			<input type="text" placeholder="exit allowed" name="exitAllowed[]">
+			<br/>
+			<input type="text" placeholder="more submission allowed" name="moreAllowed[]">
+			<br/>
+			<input type="text" placeholder="late date allowed" name="lateDateAllowed[]">
+			<br/>
+			<br/>
+			</div>
+			<span id="createNoteSpan"> </span>
+			<button id="createNoteButton" type="button"> Add more students</button>
+
+			<input type="submit" value="Create Note">
+		</form>
+
+		<br/>
+		<br/>
+		VIEW NOTE ==========================================================
+		<br/>
+
+		<input id="viewNoteID" placeholder="quiz id">
+		<button id="viewNoteButton"> View Notes </button>
+
+		<br/>
+		<br/>
+		EDIT NOTE ============================================================
+		<br/>
+
+		<form action="../TeacherBackend/EditNote.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID">
+			<br/>
+
+			<div id="editNoteDiv">
+			<input type="text" placeholder="student ID" name="studentID[]">
+			<br/>
+			<textarea placeholder="notes" name="notes[]" rows="10" cols="60"></textarea>
+			<br/>
+			<input type="text" placeholder="retake allowed (strictly enforced)" name="retakeAllowed[]">
+			<br/>
+			<input type="text" placeholder="extended time allowed" name="lateAllowed[]">
+			<br/>
+			<input type="text" placeholder="exit allowed" name="exitAllowed[]">
+			<br/>
+			<input type="text" placeholder="more submission allowed" name="moreAllowed[]">
+			<br/>
+			<input type="text" placeholder="late date allowed" name="lateDateAllowed[]">
+			<br/>
+			<br/>
+			</div>
+			<span id="editNoteSpan"> </span>
+			<button id="editNoteButton" type="button"> Add more students</button>
+
+			<input type="submit" value="Edit Note">
+		</form>
+
+
+		<p id="output"></p>
+	</body>
+</html>

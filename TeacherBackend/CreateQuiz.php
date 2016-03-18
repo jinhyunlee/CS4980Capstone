@@ -41,7 +41,7 @@
 	$quizID = $classID . $cursor->count();
 
 	$db->quizzes->insert(array(
-		"teacherID" => $teacherID,
+		"teacherID" => $MyteacherID,
 		"quizID" => $quizID,
 		"classID" => $classID,
 		"quizName" => $quizName,
@@ -60,9 +60,10 @@
 		"language" => $language
 		));
 
+	$path = "../Codes/";
 	// Create grading file
 	for ($i = 1; $i <= $size; $i++) {
-		$gradeFile = $quizID . $i . ".c";
+		$gradeFile = $path . $quizID . $i . ".c";
 		if (!file_exists($gradeFile)) {
 			$myFile = fopen($gradeFile, "w");
 			fwrite($myFile, $answer[$i-1]);

@@ -57,7 +57,7 @@
 	}
 
 	$db->quizzes->insert(array(
-		"teacherID" => $teacherID,
+		"teacherID" => $MyteacherID,
 		"quizID" => $quizID,
 		"classID" => $classID,
 		"quizName" => $quizName,
@@ -76,15 +76,16 @@
 		"language" => $language
 		));
 
+	$path = "../Codes/";
 	// MUST be less than 100 questions
 	for ($i = 1; $i <= 100; $i++) {
-		$gradeFile = $quizID . $i . ".c";
+		$gradeFile = $path . $quizID . $i . ".c";
 		if (file_exists($gradeFile)) {
 			unlink($gradeFile);
 		}
 	}
 	for ($i = 1; $i <= $size; $i++) {
-		$gradeFile = $quizID . $i . ".c";
+		$gradeFile = $path . $quizID . $i . ".c";
 		$myFile = fopen($gradeFile, "w");
 		fwrite($myFile, $answer[$i-1]);
 		fclose($myFile);

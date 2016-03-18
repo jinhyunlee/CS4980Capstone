@@ -1,6 +1,8 @@
 <?php
-	if (file_exists("Instructors.txt")) {
-		$instructors = file("Instructors.txt");
+
+	$tempstr = dirname(__FILE__);
+	if (file_exists($tempstr . "/Instructors.txt")) {
+		$instructors = file($tempstr . "/Instructors.txt");
 		$instr = array();
 
 		// Check if the id is instructor from instructors file

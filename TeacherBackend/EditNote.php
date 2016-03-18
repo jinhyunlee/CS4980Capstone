@@ -49,11 +49,11 @@
 				"quizID" => $quizID,
 				"studentID" => $studentID[$i], 
 				"notes" => $notes[$i],
-				"lateAllowed" => $lateAllowed[$i],
-				"exitAllowed" => $exitAllowed[$i],
-				"moreAllowed" => $moreAllowed[$i],
-				"lateDateAllowed" => $lateDateAllowed[$i],
-				"retakeAllowed" => $retakeAllowed[$i]
+				"lateAllowed" => filter_var($lateAllowed[$i], FILTER_VALIDATE_BOOLEAN),
+				"exitAllowed" => filter_var($exitAllowed[$i], FILTER_VALIDATE_BOOLEAN),
+				"moreAllowed" => filter_var($moreAllowed[$i], FILTER_VALIDATE_BOOLEAN),
+				"lateDateAllowed" => filter_var($lateDateAllowed[$i], FILTER_VALIDATE_BOOLEAN),
+				"retakeAllowed" => filter_var($retakeAllowed[$i], FILTER_VALIDATE_BOOLEAN)
 				));
 		}
 

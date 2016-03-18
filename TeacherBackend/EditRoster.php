@@ -34,7 +34,7 @@
 				"sectionNumber" => $sectionNumber[$i],
 				"extraTime" => $extraTime[$i],
 				"email" => $email[$i],
-				"ta" => $ta[$i]
+				"ta" => filter_var($ta[$i], FILTER_VALIDATE_BOOLEAN)
 				));
 		}
 

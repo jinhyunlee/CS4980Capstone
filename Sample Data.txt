@@ -1,6 +1,12 @@
 If you want to test with same data I have
 
 
+Class ABCD
+Student
+1	a 	1 	a 	a 	false
+1	b 	1.5 b 	b 	false
+1	c 	1 	c 	c 	true
+2	d 	1 	d 	d 	false
 
 
 Question 1: 

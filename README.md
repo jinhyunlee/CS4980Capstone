@@ -19,8 +19,8 @@ Directory ===============================================================
 		Sample files to make it easier
 
 		Files:
-			1. Roster.txt
-			2. Quiz.txt
+			1. Roster.txt 							*
+			2. Quiz.txt 							*
 
 	[TeacherBackend]
 		Teacher's portal
