@@ -14,4 +14,5 @@ GIVE RIGHTS TO ALL FOLDERS
 Prior to running:
 1. Run the server (I use apache web server from Manager-osx)
 2. Run mongo (Command Line: mongod)
-3. Run test.html
+3. Run TeacherFrontend/Teacher.html - to populate data if needed
+4. Change NetBadge.php for change of student account

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			$(document).ready(function() {
+
+				$("#saveQuizButton").click(function() {
+					$("#saveQuizSpan").append($("#saveQuizDiv").html());
+				});
+
+				$("#getQuestionsButton").click(function() {
+					$.ajax({
+						type: "POST",
+						url: "GetQuestions.php",
+						data: {
+							quizID: $("#getQuestionsID").val()
+						},
+						dataType: "text",
+						success: function(data) {
+							alert(data);
+							//alert(JSON.stringify(data));
+						}
+					})
+				});
+
+				$("#submitQuizButton").click(function() {
+					$.ajax({
+						type: "POST",
+						url: "SubmitQuiz.php",
+						data: {
+							quizID: $("#submitQuizID").val()
+						},
+						dataType: "text",
+						success: function(data) {
+							alert(data);
+							//alert(JSON.stringify(data));
+						}
+					})
+				});
+			});
+
+		</script>
+
+
+		<br/>
+		GET QUESTIONS ==========================================================
+		<br/>
+
+		<input id="getQuestionsID" placeholder="quiz id">
+		<button id="getQuestionsButton"> Get Questions </button>
+
+		<br/>
+		<br/>
+		SAVE QUIZ ===========================================================
+
+		<form action="Save.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID">
+
+			<div id="saveQuizDiv">
+			<textarea placeholder="code" name="code[]" rows="10" cols="60"></textarea>
+			<br/>
+			</div>
+			<span id="saveQuizSpan"> </span>
+			<button id="saveQuizButton" type="button"> Add more </button>
+			<input type="submit" value="Save Quiz">
+		</form>
+
+		<br/>
+		<br/>
+		SUBMIT QUESTION ===========================================================
+		<br/>
+
+		<form action="Submit.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID">
+			<input type="text" placeholder="question number" name="questionNumber">
+			<input type="text" placeholder="is this for grade?" name="grade">
+			<br/>
+			<textarea placeholder="code" name="submission" rows="10" cols="60"></textarea>
+			<br/>
+			<input type="submit" value="Submit Question">
+		</form>
+
+		<br/>
+		<br/>
+		SUBMIT QUIZ ===========================================================
+		<br/>
+		<input id="submitQuizID" placeholder="quiz id">
+		<button id="submitQuizButton"> Submit Quiz </button>
+
+	</body>
+</html>

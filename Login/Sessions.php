@@ -14,4 +14,13 @@
 	$db = $mongo->selectDB("capstone");
 
 
+	$Myta = false;
+	$MystudentID = "";
+	$MystudentName = "";
+	$MysectionNumber = -1;
+	$MyextraTime = 0;
+	$Myemail = "";
+	$MyretakeAllowed = false;
+
+
 ?>

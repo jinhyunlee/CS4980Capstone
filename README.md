@@ -1,5 +1,10 @@
 READ ME
 
+TODO (Backend):
+	1. Python - unique name and chmod, feedback filter (Michael)
+	2. Klobbering (Both)
+	3. Grading (Both)
+
 Directory ===============================================================
 
 	[Login]
@@ -36,9 +41,31 @@ Directory ===============================================================
 			8. ViewQuiz.php
 			9. ViewRoster.php
 
+	[TeacherFrontend]
+		Teacher's page
+
+		Files:
+			1. Teacher.html
+
+
+			Populate data
+			Teacher.html is my own data
+
+	[Student]
+		Students' portal
+
+		Files:
+			1. Student.html
+			2. GetQuestions.php
+			3. Submit.php
+			4. Save.php
+			5. SubmitQuiz.php
+
+			Student.html is my own tester.
 
 
 
+<< BACK-BACKEND >>
 NetBadge.php ==============================================================
 
 	[Unknown]
@@ -287,14 +314,11 @@ EditNote.php ============================================================
 		message 		<list-str>
 
 
+<< FRONT-BACKEND >>
+GetQuestions.php =======================================================
 
 
-
-TODO (Backend):
-	1. Python - unique name and chmod, feedback filter (Michael)
-	2. Klobbering (Both)
-	3. Grading (Both)
-
+<< DATABASE >>
 Mongo DB ===================================================================
 
 	use capstone
@@ -306,8 +330,6 @@ Mongo DB ===================================================================
 
 	*note these are not organized in the most smartest way...*
 	TODO Future: make it nested for list....
-
-
 
 	[Information about the quiz]
 	quizzes
@@ -346,16 +368,16 @@ Mongo DB ===================================================================
 
 	[Information about each quiz submission]
 	db.quizSubmission.find()
-		MyIPAddress 		<string> 	ip address of the student 	[UNFINISHED]
+		IPAddress 		<string> 	ip address of the student 	[UNFINISHED]
 		try					<int>		number of tries
 		finished 			<bool>		is the student done?
 		studentID 			<string>	student id
 		quizID 				<string>	quiz id
 		startDate 			<date>		when did the quiz begin
 		startTime			<time>		"  "
-		endDate				<date>		when did the quiz end
-		endTime				<time>		"  "
-		exitTime			<list-date>	list - did this person exit [UNFINISHED]
+		finishDate			<date>		when did the quiz end
+		finishTime			<time>		"  "
+	*	exitTime			<list-date>	list - did this person exit [UNFINISHED]
 
 
 	[Roster for class]

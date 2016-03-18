@@ -50,7 +50,7 @@
 		}
 
 		$cursor = $db->allowed->find(array(
-			"studentID" => $studentID,
+			"studentID" => $MystudentID,
 			"quizID" => $quizID));
 
 		if ($cursor->count() > 0) {
