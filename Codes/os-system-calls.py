@@ -11,6 +11,8 @@ if __name__ == "__main__":
 	output_data['standard_out'] = ''
 	output_data['standard_error'] = ''
 	output_file = sys.argv[1] + '.out'
+	output_file = output_file.replace(".c", "")
+	command = "./" + output_file
 	# params = ['gcc', '-o', output_file, sys.argv[1], sys.argv[2]]
 	# sp = subprocess.Popen(params)
 	# sp.communicate()
@@ -81,7 +83,8 @@ if __name__ == "__main__":
 
 	rc = os.remove(output_file)
 	print 'remove rc: ' + str(rc)
-	with open('data.txt', 'w') as outfile:
+	output_txt = output_file.replace(".out", ".txt");
+	with open(output_txt, 'w') as outfile:
 		json.dump(output_data, outfile)
 	# a+rwx
-	os.chmod('data.txt', 0777)
+	os.chmod(output_txt, 0777)

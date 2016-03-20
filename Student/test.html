@@ -1,0 +1,191 @@
+<html>
+	<head>
+		<title> Quiz Sample </title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="test.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+		<!--import our javascript methods-->
+		<script src="test.js"></script>
+
+		<!-- ACE -->
+		<script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link href='https://fonts.googleapis.com/czs?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+		<div id="test">
+			<center>
+				<div id = "problem" style="display:none">
+					<div id = "problemhead">
+						<button type="button" class="btn btn-info" id = "previous">
+				     		<span class="glyphicon glyphicon-chevron-left"></span>
+				    	</button>
+						<div id = "problemNum">Problem #1: [NAME OF PROBLEM]</div>
+						<button type="button" class="btn btn-info" id = "next">
+					     	<span class="glyphicon glyphicon-chevron-right"></span>
+					    </button>
+					</div>
+					<div id = "description"> 
+						Description of problem here
+					</div>
+				</div>
+				<div id = "quizIDDiv"><h2>Quiz Id:</h2><input type = "text" id = "quizIDInput"></input></div><br>
+				<button id = "fullscreen" class="btn btn-default" onclick="requestFullScreen(document.body)">START TEST</button>
+			</center>
+			<div id="countdown" style="display:none">
+			</div>
+			<div id = "bottom" style="display:none">
+				<div id = "left">
+					<h2 class = "pull-left"> Code here</h2>
+					<button class="btn btn-default pull-right" id = "submitCode">SUBMIT</button>
+					<button class="btn btn-default pull-right" id = "compile">COMPILE</button>
+					<pre id="editor"></pre><br>
+				</div>
+				<div id = "right">
+					<button class = "btn btn-default pull-right" id = "finish" onclick="finishTest(document.body)">FINISH</button>
+					<h2 class = "pull-left">The results of the test</h2>
+					<textarea readonly id = "result"></textarea>
+				</div>
+			</div>
+		</div>
+		<center>
+			<button id = "resumeTesting" class="btn btn-default" style = "display:none" onclick="requestFullScreen(document.body)">RESUME TEST</button>
+		</center>
+
+
+		<script type="text/javascript">
+		//for storing all the questions
+		var questions = [];
+		
+		var currentCode = [];
+		var currentFeedback = [];
+		var timeAllowed = 0; 
+		var quizID;
+		//for determining which question we are currently on
+		var qIndex = 0;
+		//determine if copied text was inside or outside window
+		var copied = 0;
+		var myInterval;
+		var timerTime;
+		//determined if test was entered 
+		//(to prevent action occuring if alt-tabbing before test is entered)
+		var EnteredTest = 0;
+		//initialize editor
+	    var editor = ace.edit("editor");
+	    editor.setTheme("ace/theme/twilight");
+	    editor.getSession().setMode("ace/mode/c_cpp");
+	    editor.getSession().on('change', function(e) {
+	    	var startRow = e["start"]["row"];
+	    	var startColumn = e["start"]["column"];
+	    	var endRow = e["end"]["row"];
+	    	var endColumn = e["end"]["column"];
+	    	var action = e["action"];
+	    	var lines = e["lines"];
+	    	console.log(JSON.stringify(e));
+	    	var keystrokeLog = "Start Row: " + startRow + " Start Column: " + startColumn + " End Row: " + endRow + " End Column: " + endColumn + " Action: " + action + " Lines: " + lines;
+	    	//detection of copy/paste. only allowing copy and paste from current window.
+	    	editor.commands.on("exec", function(e){
+	    		if (e.command) {
+	    			if(e.command.name == 'copy'){
+	    				copied = 1;
+	    			}
+	    			if(e.command.name == 'paste'){
+	    				if(copied == 0){
+	    					e.preventDefault();
+	    				}
+	    			}
+	    		}
+	    	});
+	    });
+	    //initialize all buttons
+		$(document).ready(function() {
+			//on submitting code
+			$('#submitCode').click(function() {
+				if (confirm("Are you sure you want to want to submit the quiz? You will not be able to make changes once you have submitted the assignment.")) {
+					$.ajax({
+						type: "POST",
+				        url: "Submit.php",
+				        //Requires more data, get from READ ME
+				        data: {
+				        	quizID: quizID,
+				        	questionNumber: (qIndex + 1),
+				        	submission: editor.getValue(),
+				        	grade: 1 },
+				        success: function(data){
+				        	document.getElementById("result").innerHTML = data.compile_message + "\n" + data.standard_out + "\n" +data.standard_error;
+				        	alert("You have successfully submitted your result");
+				        	//CHANGE SCREENS here
+				        }
+		    		});
+				}
+			});
+			//on compilation
+			$('#compile').click(function() {
+				$.ajax({
+					type: "POST",
+			        url: "Submit.php",
+			        //Requires more data, get from READ ME
+			        data: {
+			        	quizID: quizID, 
+			        	questionNumber: (qIndex + 1), 
+			        	submission: editor.getValue(),
+			        	grade: 0 },
+			        dataType: "JSON",
+			        success: function(data){
+			        	document.getElementById("result").innerHTML = data.result + "\n";
+			        	alert(editor.getValue());
+			        	// alert("THE RESULTS OF THE COMPILATION?");
+			        }
+	    		});
+			});
+			//on previous click when going through questions
+			$('#previous').click(function() {
+				saveText();
+				qIndex--;
+				loadText();
+				loadButtons();
+				document.getElementById('problemNum').innerHTML = qIndex + 1;
+	        	document.getElementById("description").innerHTML = question[qIndex].description;
+			});
+			//on next click when going through questions
+			$('#next').click(function() {
+				//on previous click, replace title with question
+				saveText();
+				qIndex++;
+				loadText();
+				loadButtons();
+				document.getElementById('problemNum').innerHTML = qIndex + 1;
+	        	document.getElementById("description").innerHTML = question[qIndex].description;
+			});
+		});
+		//detection of alt-tabbing
+		$(window).blur(function(){
+			//pause test if alt-tabbed
+			if(EnteredTest){
+				pauseTest();
+			}
+			copied = 0;
+		});
+		//event listener for fullscreen change
+		if (document.addEventListener) {
+		    document.addEventListener('webkitfullscreenchange', exitTest, false);
+		    document.addEventListener('mozfullscreenchange', exitTest, false);
+		    document.addEventListener('fullscreenchange', exitTest, false);
+		    document.addEventListener('MSFullscreenChange', exitTest, false);
+		    //document.addEventListener('unload', exitTest);
+		}
+		//save code every 10 seconds
+		setInterval(function() {
+		    saveToServer();
+		}, 10000); 
+		</script>
+	</body>
+</html>

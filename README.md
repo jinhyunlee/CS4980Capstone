@@ -60,6 +60,10 @@ Directory ===============================================================
 			3. Submit.php
 			4. Save.php
 			5. SubmitQuiz.php
+			6. test.html
+			7. test.js
+			8. test.css
+			9. [ace-builds]
 
 			Student.html is my own tester.
 
@@ -377,7 +381,7 @@ Mongo DB ===================================================================
 		startTime			<time>		"  "
 		finishDate			<date>		when did the quiz end
 		finishTime			<time>		"  "
-	*	exitTime			<list-date>	list - did this person exit [UNFINISHED]
+		exitTime			<list-date>	list - did this person exit
 
 
 	[Roster for class]
@@ -402,6 +406,171 @@ Mongo DB ===================================================================
 		quizID				<string> 	quizID
 		lateDateAllowed		<bool>		late date allowed
 		retakeAllowed 		<bool>		additional take allowed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -452,7 +621,7 @@ GetQuestions.php ===========================================================
 			<list> 		code
 			<list> 		feedback
 			<bool>		continue;		is this a continue or a new quiz?
-			<int> 		timeLeft 			// milliseconds
+			<int> 		timeLeft 			// seconds
 
     		<bool> 		success; see if it is successful or not
     		<string> 	message; message about it's return to see what went wrong

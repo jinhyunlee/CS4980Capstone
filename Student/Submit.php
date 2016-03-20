@@ -24,13 +24,15 @@
 	}
 
 	$path = "../Codes/";
+	chdir($path);
+
 	if ($language == "C") {
-		$studentFile = $path . $quizID . $MystudentID . $questionNumber . ".c";
-		$gradeFile = $path . $quizID . $questionNumber . ".c";
+		$studentFile = $quizID . $MystudentID . $questionNumber . ".c";
+		$gradeFile = $quizID . $questionNumber . ".c";
 	}
 	else {
-		$studentFile = $path . $quizID . $MystudentID . $questionNumber . ".c";
-		$gradeFile = $path . $quizID . $questionNumber . ".c";
+		$studentFile = $quizID . $MystudentID . $questionNumber . ".c";
+		$gradeFile = $quizID . $questionNumber . ".c";
 	}
 
 	$currDate = date("Y-m-d");
@@ -41,7 +43,7 @@
 	fwrite($myFile, $submission);
 	fclose($myFile);
 
-	$str = "../Grade/python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
+	$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	//$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile;
 	exec($str, $op);
 

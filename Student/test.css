@@ -1,0 +1,113 @@
+body {
+	margin: 20px;
+	background-color: black;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+h1 {
+	color: white;
+	margin: 5px;
+}
+
+h2 {
+	font-size: 20px;
+	color: #ccc;
+	margin: 5px;
+}
+#quizIDForm {
+	color: #ccc;
+	font-size: 20px;
+}
+
+#problemhead{
+	margin: 2px;
+	font-size: 40px;
+	color: #ddd;
+    white-space: nowrap;
+    display:inline-block;
+}
+
+#description {
+	font-size: 20px;
+	color: #ccc;
+	margin: 2px;
+}
+
+#problemNum{
+	display: inline;
+}
+
+#left, #right {
+ width: 40%;
+ margin: 45px;
+ float: left;
+}
+
+.btn-info {
+	background-color: #555;
+	padding: 6px;
+	border: none;
+	display: inline-block;
+	-webkit-transition: background-color ease-out 1s;
+    -moz-transition: background-color ease-out 1s;
+    -o-transition: background-color ease-out 1s;
+    transition: background-color ease-out 1s;
+}
+
+.btn-info:hover {
+	background-color: #ccc;
+	-webkit-transition: background-color ease-out 1s;
+    -moz-transition: background-color ease-out 1s;
+    -o-transition: background-color ease-out 1s;
+    transition: background-color ease-out 1s;
+}
+
+.btn-info:active{
+	background-color: #ccc;
+}
+
+#compile, #submitCode {
+	padding: 3px;
+}
+
+#compile {
+	margin-right: 15px;
+}
+
+#result {
+	width: 550px;
+	height: 450px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+}
+
+#description {
+	font-size: 20px;
+	color: #ccc;
+	margin: 0px;
+}
+
+#finish {
+	padding: 3px;
+}
+
+#editor { 
+   	float: left;
+    width: 550px;
+    height: 450px;
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+}
+
+#countdown {
+	top: 0px;
+	bottom: 0px;
+}
+
+#bottom {
+	top: 0px;
+}
+
+#countdown {
+	font-size: 15;
+	color: white;
+}
