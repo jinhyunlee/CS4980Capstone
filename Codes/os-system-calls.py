@@ -51,10 +51,14 @@ if __name__ == "__main__":
 			#
 			# First attempt to compile
 			#
+			os.putenv("TMPDIR", "/tmp")
 			args = ['gcc', '-o', output_file, sys.argv[1], sys.argv[2]]
 			compile_process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			out, err = compile_process.communicate()
 			rc = compile_process.returncode
+			#print out
+			#print err
+			#print os.environ
 			print 'return code is: ' + str(rc)
 			if not rc == 0:
 				raise Exception
@@ -62,6 +66,7 @@ if __name__ == "__main__":
 
 			# Then attempt to run
 			try:
+
 				command = './' + output_file
 				sp = subprocess.Popen([command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 				try:
