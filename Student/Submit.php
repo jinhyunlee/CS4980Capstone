@@ -43,20 +43,26 @@
 	fwrite($myFile, $submission);
 	fclose($myFile);
 
+	chmod($studentFile, 0777);
+
 	$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	//$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile;
-	exec($str, $op);
+	$execs = exec($str, $op);
 
-	$object = array();
+	/*$object["message"][] = getcwd();
+	$object["message"][] = $str;
+	$object["message"][] = $execs;
+	$object["message"][] = $op;*/
+
 	$outputFile = $quizID . $MystudentID . $questionNumber . ".txt";
 	if (file_exists($outputFile)) {
 		$object["success"] = true;
-		$object["message"] = "results are found";
+		$object["message"][] = "results are found";
 		$object["result"] = file_get_contents($outputFile);
 	}
 	else {
 		$object["success"] = false;
-		$object["message"] = "results file are not found";
+		$object["message"][] = "results file are not found";
 		$object["result"] = "";
 		echo json_encode($object);
 		exit;

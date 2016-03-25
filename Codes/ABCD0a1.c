@@ -1,3 +1,3 @@
 int five() {
-    return 3;
+    return 5;
 }
