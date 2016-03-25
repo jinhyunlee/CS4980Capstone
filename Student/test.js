@@ -1,5 +1,6 @@
 //save the current code and feedback
 var startQuiz = 0;
+var saveIntervalID;
 
 function saveText() {
 	currentCode[qIndex] = editor.getValue();
@@ -8,8 +9,13 @@ function saveText() {
 
 //if coming back to test, retrieve code previously saved and display
 function loadText() {
-	editor.setValue(currentCode[qIndex], 1);
-	document.getElementById("result").innerHTML = currentFeedback[qIndex];
+	if (currentCode[qIndex] != null) {
+		editor.setValue(currentCode[qIndex], 1);
+	}
+
+	if (currentFeedback[qIndex] != null) {
+		document.getElementById("result").innerHTML = currentFeedback[qIndex];
+	}
 }
 
 //save code to server (done automatically)
@@ -21,16 +27,27 @@ function saveToServer(){
         	code : currentCode, 
         },
         success: function(data){
-     		//alert("Code saved.");
+     		console.log("Code Saved");
         }
 	});*/
 }
 
 //when test is finished
 function finishTest(element) {
-	document.getElementById("bottom").style.disply = "none";
-	document.getElementById("problem").text = "hidden";
+	finished = 1;
+
+	document.getElementById("bottom").style.display = "none";
+	document.getElementById("problemNum").style.display = "none";
+	document.getElementById("next").style.display = "none";
+	document.getElementById("previous").style.display = "none";
+	document.getElementById("description").innerHTML = "You are now finished. You may close the window."
 	document.getElementById('countdown').style.display = "none";
+
+	document.removeEventListener('webkitfullscreenchange', exitTest, false);
+    document.removeEventListener('mozfullscreenchange', exitTest, false);
+    document.removeEventListener('fullscreenchange', exitTest, false);
+    document.removeEventListener('MSFullscreenChange', exitTest, false);
+
 	document.webkitExitFullscreen();
 	document.mozCancelFullscreen();
 	document.exitFullscreen();
@@ -49,7 +66,7 @@ function exitTest() {
 	        	quizID : quizID, 
 	        },
 	        success: function(data){
-	     		// alert("Code saved.");
+	     		console.log("Code saved");
 	        }
 		});
 
@@ -62,14 +79,17 @@ function pauseTest() {
 	document.getElementById("test").style.display = "none";
 	document.getElementById("resumeTesting").style.display = "block";
 	clearInterval(myInterval);
+	clearInterval(saveIntervalID);
 }
 
 //resume test if returning
 function resumeTest() {
 	document.getElementById("test").style.display = "block";
 	document.getElementById("resumeTesting").style.display = "none";
-	var date = new Date().getTime();
-	timerTime =  date + (timeAllowed * 60 * 1000);
+	
+	saveIntervalID = setInterval(function() {
+	    saveToServer();
+	}, 10000);
 }
 
 //for the timer
@@ -110,12 +130,14 @@ function getQuestions() {
 	$.ajax({
         type: "POST",
         url: "GetQuestions.php",
+        async: false,
         data: {quizID: quizID},
         dataType: "JSON",
         success: function(data){
         	//retrieve quiz from database in JSON format
         	//document.getElementById("quizName").innerHTML = data.quizName;
         	if (data.success) {
+        		console.log(data);
         		document.getElementById("description").innerHTML = data.question[0];
 	        	var i;
 	        	for (i = 0; i < data.question.length; i++) {
@@ -125,14 +147,24 @@ function getQuestions() {
 	        			currentFeedback[i] = data.feedback[i];
 	        		}
 	        	}
-	        	alert("hihi");
-	        	timeAllowed = data.timeAllowed;
-	        	myInterval = setInterval(function() { myTimer() }, 1000);
-	        	var quizName = data.quizName;
+	        	
+	       		var date = new Date().getTime();
+	        
+	        	if (data.timeLeft != null) {
+		        	timeAllowed = data.timeLeft;
+		        	timerTime =  date + (timeAllowed *  1000);
+			    } else {
+			       	timeAllowed = data.timeAllowed;
+			       	timerTime =  date + (timeAllowed * 60 * 1000);
+			    }
+	        	
+	        	clearInterval(myInterval);
+		       	myInterval = setInterval(myTimer, 1000);
+
+		        var quizName = data.quizName;
+		        	
 	        	startQuiz = 1;
-	        	return 1;
 	        } else {
-	        	return 0;
 	        }
         }
 	});
@@ -140,14 +172,14 @@ function getQuestions() {
 
 //force full screen
 function requestFullScreen(element) {
-	EnteredTest = 1;
 	quizID = document.getElementById("quizIDInput").value;
-	// resumeTest();
 
 	getQuestions();
-	alert(startQuiz);
 	if (startQuiz == 1) {
 	//if (getQuestions() == 1) {
+		document.getElementById("problemNum").innerHTML = "Problem #" + questions[qIndex].number;
+		document.getElementById("description").innerHTML = questions[qIndex].description;
+	
 		resumeTest();
 		loadButtons();
 		var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
@@ -166,8 +198,11 @@ function requestFullScreen(element) {
 				wscript.SendKeys("{F11}");
 			}
 		}
+		saveIntervalID = setInterval(function() {
+		    saveToServer();
+		}, 10000);
 	}
-	// else {
-		// alert("Entered the wrong quiz ID");
-	// }
+	else {
+		alert("Entered the wrong quiz ID.");
+	}
 }

@@ -3,7 +3,7 @@
 		<title> Quiz Sample </title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="test.css">
 
 		<!-- jQuery library -->
@@ -16,7 +16,7 @@
 		<script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
 		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<link href='https://fonts.googleapis.com/czs?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
 	</head>
@@ -50,8 +50,8 @@
 					<pre id="editor"></pre><br>
 				</div>
 				<div id = "right">
-					<button class = "btn btn-default pull-right" id = "finish" onclick="finishTest(document.body)">FINISH</button>
 					<h2 class = "pull-left">The results of the test</h2>
+					<button class = "btn btn-default pull-right" id = "finish" onclick="finishTest(document.body)">FINISH</button>
 					<textarea readonly id = "result"></textarea>
 				</div>
 			</div>
@@ -112,6 +112,7 @@
 				if (confirm("Are you sure you want to want to submit the quiz? You will not be able to make changes once you have submitted the assignment.")) {
 					$.ajax({
 						type: "POST",
+						dataType: "JSON",
 				        url: "Submit.php",
 				        //Requires more data, get from READ ME
 				        data: {
@@ -120,10 +121,22 @@
 				        	submission: editor.getValue(),
 				        	grade: 1 },
 				        success: function(data){
-				        	document.getElementById("result").innerHTML = data.compile_message + "\n" + data.standard_out + "\n" +data.standard_error;
-				        	alert("You have successfully submitted your result");
-				        	//CHANGE SCREENS here
-				        }
+				        	var text = "";
+				        	try {
+				        		var result = JSON.parse(data.result);
+				        		text = "Compile Message: \n" + result.compile_message;
+								if(result.standard_out) {
+									text+= "\n\n" + "Standard Out: \n" + result.standard_out;
+								} 
+								if (result.standard_error) {
+									text+= "\n\n" + "Standard Error: \n" + result.standard_error;
+								}
+				        	} 
+				        	catch (e) {
+				        		text = data.result;
+				        	}
+				        	document.getElementById("result").innerHTML = text;
+						}
 		    		});
 				}
 			});
@@ -132,6 +145,7 @@
 				$.ajax({
 					type: "POST",
 			        url: "Submit.php",
+			        dataType: "JSON",
 			        //Requires more data, get from READ ME
 			        data: {
 			        	quizID: quizID, 
@@ -140,36 +154,50 @@
 			        	grade: 0 },
 			        dataType: "JSON",
 			        success: function(data){
-			        	document.getElementById("result").innerHTML = data.result + "\n";
-			        	alert(editor.getValue());
-			        	// alert("THE RESULTS OF THE COMPILATION?");
+			        	var text = "";
+			        	try {
+			        		var result = JSON.parse(data.result);
+			        		text = "Compile Message: \n" + result.compile_message;
+							if(result.standard_out) {
+								text+= "\n\n" + "Standard Out: \n" + result.standard_out;
+							} 
+							if (result.standard_error) {
+								text+= "\n\n" + "Standard Error: \n" + result.standard_error;
+							}
+			        	} 
+			        	catch (e) {
+			        		text = data.result;
+			        	}
+			        	document.getElementById("result").innerHTML = text;
 			        }
 	    		});
 			});
 			//on previous click when going through questions
 			$('#previous').click(function() {
+				console.log("previousClicked")
 				saveText();
 				qIndex--;
 				loadText();
 				loadButtons();
-				document.getElementById('problemNum').innerHTML = qIndex + 1;
-	        	document.getElementById("description").innerHTML = question[qIndex].description;
+				document.getElementById('problemNum').innerHTML = "Problem #" + (qIndex + 1);
+	        	document.getElementById("description").innerHTML = questions[qIndex].description;
 			});
 			//on next click when going through questions
 			$('#next').click(function() {
+				console.log("nextClicked");
 				//on previous click, replace title with question
 				saveText();
 				qIndex++;
 				loadText();
 				loadButtons();
-				document.getElementById('problemNum').innerHTML = qIndex + 1;
-	        	document.getElementById("description").innerHTML = question[qIndex].description;
+				document.getElementById('problemNum').innerHTML = "Problem #" + (qIndex + 1);
+	        	document.getElementById("description").innerHTML = questions[qIndex].description;
 			});
 		});
 		//detection of alt-tabbing
 		$(window).blur(function(){
 			//pause test if alt-tabbed
-			if(EnteredTest){
+			if(startQuiz){
 				pauseTest();
 			}
 			copied = 0;
@@ -183,9 +211,6 @@
 		    //document.addEventListener('unload', exitTest);
 		}
 		//save code every 10 seconds
-		setInterval(function() {
-		    saveToServer();
-		}, 10000); 
 		</script>
 	</body>
 </html>
