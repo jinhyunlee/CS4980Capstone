@@ -24,7 +24,7 @@
 		=============================================================== */
 
 	$currDate = date("Y-m-d");
-	$currTime = date("h:i");
+	$currTime = date("h:i:s");
 
 	for ($i = 0; $i < count($code); $i++) {
 

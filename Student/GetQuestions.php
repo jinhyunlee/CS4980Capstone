@@ -46,7 +46,7 @@
 
 
 		$currDate = date("Y-m-d");
-		$currTime = date("h:i");
+		$currTime = date("h:i:s");
 
 		// Get the begin and end date 
 		if (is_array($sectionNumber)) {

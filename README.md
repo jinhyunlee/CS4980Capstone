@@ -1,5 +1,14 @@
 READ ME
 
+
+
+
+
+python:
+
+	TMPDIR
+	pip install subprocess32
+
 TODO (Backend):
 	1. Python - unique name and chmod, feedback filter (Michael)
 	2. Klobbering (Both)

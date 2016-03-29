@@ -19,7 +19,7 @@
 	if ($cursor->count() > 0) {
 
 		$currDate = date("Y-m-d");
-		$currTime = date("h:i");
+		$currTime = date("h:i:s");
 
 		$newdata = array('$set' => array(
 			"finished" => true,

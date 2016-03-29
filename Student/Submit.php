@@ -36,14 +36,14 @@
 	}
 
 	$currDate = date("Y-m-d");
-	$currTime = date("h:i");
+	$currTime = date("h:i:s");
 
 
 	$myFile = fopen($studentFile, "w");
 	fwrite($myFile, $submission);
 	fclose($myFile);
 
-	chmod($studentFile, 0777);
+	//chmod($studentFile, 0777);
 
 	$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	//$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile;
