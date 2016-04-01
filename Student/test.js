@@ -1,6 +1,8 @@
 //save the current code and feedback
 var startQuiz = 0;
 var saveIntervalID;
+var timerTime = 0;
+var myInterval;
 
 function saveText() {
 	currentCode[qIndex] = editor.getValue();
@@ -11,10 +13,14 @@ function saveText() {
 function loadText() {
 	if (currentCode[qIndex] != null) {
 		editor.setValue(currentCode[qIndex], 1);
+	} else {
+		editor.setValue("", 1);
 	}
 
 	if (currentFeedback[qIndex] != null) {
 		document.getElementById("result").innerHTML = currentFeedback[qIndex];
+	} else {
+		document.getElementById("result").innerHTML = "";
 	}
 }
 
@@ -86,7 +92,7 @@ function pauseTest() {
 function resumeTest() {
 	document.getElementById("test").style.display = "block";
 	document.getElementById("resumeTesting").style.display = "none";
-	
+	loadText();
 	saveIntervalID = setInterval(function() {
 	    saveToServer();
 	}, 10000);
@@ -97,12 +103,12 @@ function myTimer() {
 	//TIMER FUNCTIONS
 	var counterDate = new Date().getTime()
 	var countdown = document.getElementById('countdown');
-	var secondsLeft = timerTime - counterDate;
+	var secondsLeft = timerTime - Math.round(counterDate/1000);
 
-	var minutes = Math.floor(secondsLeft/60000);
-	var seconds = ((secondsLeft%60000)/1000).toFixed(0);
+	var minutes = Math.floor(secondsLeft/60);
+	var seconds = ((secondsLeft%60)).toFixed(0);
 	
-	if (seconds > 10) {
+	if (seconds > 9) {	
 		countdown.innerHTML = '' + minutes + ':' + seconds;
 	} else {
 		countdown.innerHTML = '' + minutes + ':0' + seconds;
@@ -147,15 +153,12 @@ function getQuestions() {
 	        			currentFeedback[i] = data.feedback[i];
 	        		}
 	        	}
-	        	
 	       		var date = new Date().getTime();
 	        
 	        	if (data.timeLeft != null) {
-		        	timeAllowed = data.timeLeft;
-		        	timerTime =  date + (timeAllowed *  1000);
+		        	timerTime =  Math.round(date/1000) + data.timeLeft;
 			    } else {
-			       	timeAllowed = data.timeAllowed;
-			       	timerTime =  date + (timeAllowed * 60 * 1000);
+			       	timerTime =  Math.round(date/1000) + data.timeAllowed;
 			    }
 	        	
 	        	clearInterval(myInterval);
@@ -165,6 +168,7 @@ function getQuestions() {
 		        	
 	        	startQuiz = 1;
 	        } else {
+	        	console.log(data.message)
 	        }
         }
 	});
@@ -173,7 +177,6 @@ function getQuestions() {
 //force full screen
 function requestFullScreen(element) {
 	quizID = document.getElementById("quizIDInput").value;
-
 	getQuestions();
 	if (startQuiz == 1) {
 	//if (getQuestions() == 1) {
@@ -185,7 +188,6 @@ function requestFullScreen(element) {
 		var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
 		if (requestMethod) {
 			requestMethod.call(element);
-
 			document.getElementById("fullscreen").style.display = "none";
 			document.getElementById("quizIDDiv").style.display = "none";
 			document.getElementById("countdown").style.display = "block";
@@ -203,6 +205,6 @@ function requestFullScreen(element) {
 		}, 10000);
 	}
 	else {
-		alert("Entered the wrong quiz ID.");
+		alert("Entered the wrong quiz ID ("+startQuiz+").");
 	}
 }
