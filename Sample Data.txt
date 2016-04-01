@@ -1,13 +1,4 @@
-If you want to test with same data I have
-
-
-Class ABCD
-Student
-1	a 	1 	a 	a 	false
-1	b 	1.5 b 	b 	false
-1	c 	1 	c 	c 	true
-2	d 	1 	d 	d 	false
-
+MAKE SURE TO WRAP CELL for CSV
 
 Question 1: 
 
@@ -18,43 +9,114 @@ ANSWER 1:
 #include <stdio.h>
 
 int main() {
-       printf("Five in number is %d", five());
-       if (five() != 5) {
-           printf("Failed");
-       }
-       else {
-           printf("Success");
-       }
-       return 0;
+    if (five() != 5) {
+        printf("Failed");
+        fprintf(stderr, "Failed: Five() should be 5, but got %d\n", five());
+    }
+    else {
+        printf("Success");
+        fprintf(stderr, "Success: Five() is %d\n", five());
+    }
+    return 0;
 }
 
 CODE 1:
 
 int five() {
-	return 5;
+    return 5;
 }
 
 QUESTION 2:
 
-Write a method called 'three' with no parameter that returns an int "3" 
+Write a method called 'absolute' with int parameter that returns absolute value of the number. 
 
 ANSWER 2:
 
 #include <stdio.h>
 
 int main() {
-       printf("Three  in number is %d", three());
-       if (three() != 3) {
-           printf("Failed");
-       }
-       else {
-           printf("Success");
-       }
-       return 0;
+    if (absolute(-3) != 3) {
+        printf("Failed");
+        fprintf(stderr, "Failed: absolute(-3) should be 3, but got %d\n", absolute(-3));
+    }
+    else {
+        printf("Success");
+        fprintf(stderr, "Success: absolute(-3) is %d\n", absolute(-3));
+    }
+
+    if (absolute(7) != 7) {
+        printf("Failed");
+        fprintf(stderr, "Failed: absolute(7) should be 7, but got %d\n", absolute(7));
+    }
+    else {
+        printf("Success");
+        fprintf(stderr, "Success: absolute(7) is %d\n", absolute(7));
+    }
+    return 0;
 }
 
 CODE 2:
 
-int three() {
-	return 3;
+int absolute(int x) {
+    return (x < 0) ? -1*x : x;
 }
+
+Question 3: 
+
+Write an int function called 'diff' with two int parameters that returns the difference of the two numbers. 
+
+ANSWER 3:
+
+#include <stdio.h>
+
+int main() {
+    if (diff(5, 3) != 2) {
+        printf("Failed\n");
+        fprintf(stderr, "Failed: Difference of 5 and 3 should be 2, but got %d\n", diff(5, 3));
+    }
+    else {
+        printf("Success\n");
+        fprintf(stderr, "Success: Difference of 5 and 3 is %d\n", diff(5, 3));
+    }
+
+    if (diff(3, 3) != 0) {
+        printf("Failed\n");
+        fprintf(stderr, "Failed: Difference of 3 and 3 should be 0, but got %d\n", diff(3, 3));
+    }
+    else {
+        printf("Success\n");
+        fprintf(stderr, "Success: Difference of 3 and 3 is %d\n", diff(3, 3));
+    }
+
+    if (diff(3, 6) != 3) {
+        printf("Failed\n");
+        fprintf(stderr, "Failed: Difference of 3 and 6 should be 3, but got %d\n", diff(3, 6));
+    }
+    else {
+        printf("Success\n");
+        fprintf(stderr, "Success: Difference of 3 and 6 is %d\n", diff(3, 6));
+    }
+    return 0;
+}
+
+CODE 3:
+
+int diff(int x, int y) {
+    return (x < y) ? y - x : x - y;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

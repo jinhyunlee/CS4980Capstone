@@ -1,31 +1,18 @@
 <?php
 
 	
-	// Check if quiz id is given
-	if (!isset($_POST["quizID"])) {
-		$object["success"] = false;
-		$object["message"][] = "quizID not given";
-		echo json_encode($object);
-		exit;	
-	}
-	$quizID =  $_POST["quizID"];
-
-	require "../Login/CheckLoginGrader.php";
-
-	// Array set up
-	$studentID = array();
-	$notes = array();
-	$lateAllowed = array();
-	$exitAllowed = array();
-	$moreAllowed = array();
-	$lateDateAllowed = array();
-	$retakeAllowed = array();
+	require "Note.php";
 
 	// Find quiz
-	$cursor = $db->quizzes->find(array("quizID" => $quizID));
+	$cursor = $db->quizzes->find(array(
+		"quizID" => $quizID
+		));
+
 	if ($cursor->count() > 0) {
 
-		$cursor = $db->allowed->find(array("quizID" => $quizID));
+		$cursor = $db->allowed->find(array(
+			"quizID" => $quizID
+			));
 
 		foreach ($cursor as $document) {
 			$studentID[] = $document["studentID"];
