@@ -20,7 +20,6 @@ class Compiler:
 				out, err = compile_process.communicate()
 				rc = compile_process.returncode
 				print 'return code is: ' + str(rc)
-
 				if rc != 0:
 					raise Exception
 				self.output_data['compile_message'] = 'program compiled successfully!'
@@ -67,6 +66,7 @@ class Compiler:
 			json.dump(self.output_data, outfile)
 		# a+rwx
 		os.chmod(self.output_file, 0777)
+	
 	
 if __name__ == "__main__":
 	os.putenv("TMPDIR", "/tmp")
