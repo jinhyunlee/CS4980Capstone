@@ -78,6 +78,7 @@
 		//determined if test was entered 
 		//(to prevent action occuring if alt-tabbing before test is entered)
 		var EnteredTest = 0;
+		
 		//initialize editor
 	    var editor = ace.edit("editor");
 	    editor.setTheme("ace/theme/twilight");
@@ -105,6 +106,7 @@
 	    		}
 	    	});
 	    });
+	    
 	    //initialize all buttons
 		$(document).ready(function() {
 			//on submitting code
@@ -121,6 +123,7 @@
 				        	submission: editor.getValue(),
 				        	grade: 1 },
 				        success: function(data){
+				        	console.log(data.message);
 				        	var text = "";
 				        	try {
 				        		var result = JSON.parse(data.result);
@@ -154,6 +157,7 @@
 			        	grade: 0 },
 			        dataType: "JSON",
 			        success: function(data){
+			        	console.log(data.message);
 			        	var text = "";
 			        	try {
 			        		var result = JSON.parse(data.result);
