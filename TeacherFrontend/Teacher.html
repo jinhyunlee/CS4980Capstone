@@ -10,10 +10,6 @@
 					$("#createRosterSpan").append($("#createRosterDiv").html());
 				});
 
-				$("#editRosterButton").click(function() {
-					$("#editRosterSpan").append($("#editRosterDiv").html());
-				});
-
 				$("#createQuizButton1").click(function() {
 					$("#createQuizSpan1").append($("#createQuizDiv1").html());
 				});
@@ -32,10 +28,6 @@
 
 				$("#createNoteButton").click(function() {
 					$("#createNoteSpan").append($("#createNoteDiv").html());
-				});
-
-				$("#editNoteButton").click(function() {
-					$("#editNoteSpan").append($("#editNoteDiv").html());
 				});
 
 				$("#viewRosterButton").click(function() {
@@ -115,28 +107,6 @@
 
 		<br/>
 		<br/>
-		EDIT ROSTER ============================================================
-		<br/>
-
-		<form action="../TeacherBackend/EditRoster.php" method="post">
-			<input type="text" placeholder="class id" name="classID">
-
-			<div id="editRosterDiv">
-			<input type="text" placeholder="section number" name="sectionNumber[]">
-			<input type="text" placeholder="student id" name="studentID[]">
-			<input type="text" placeholder="extra time" name="extraTime[]">
-			<input type="text" placeholder="student name" name="studentName[]">
-			<input type="text" placeholder="email" name="email[]">
-			<input type="text" placeholder="ta" name="ta[]">
-			<br/>
-			</div>
-			<span id="editRosterSpan"> </span>
-			<button id="editRosterButton" type="button"> Add more </button>
-			<input type="submit" value="Edit Roster">
-		</form>
-			
-		<br/>
-		<br/>
 		CREATE QUIZ ============================================================
 		<br/>
 
@@ -195,7 +165,7 @@
 		EDIT QUIZ ============================================================
 		<br/>
 
-		<form action="../TeacherBackend/EditQuiz.php" method="post">
+		<form action="../TeacherBackend/CreateQuiz.php" method="post">
 			<input type="text" placeholder="quiz id" name="quizID">
 			<input type="text" placeholder="class id" name="classID">
 			<input type="text" placeholder="quiz name" name="quizName">
@@ -279,35 +249,6 @@
 
 		<br/>
 		<br/>
-		EDIT NOTE ============================================================
-		<br/>
-
-		<form action="../TeacherBackend/EditNote.php" method="post">
-			<input type="text" placeholder="quiz id" name="quizID">
-			<br/>
-
-			<div id="editNoteDiv">
-			<input type="text" placeholder="student ID" name="studentID[]">
-			<br/>
-			<textarea placeholder="notes" name="notes[]" rows="10" cols="60"></textarea>
-			<br/>
-			<input type="text" placeholder="retake allowed (strictly enforced)" name="retakeAllowed[]">
-			<br/>
-			<input type="text" placeholder="extended time allowed" name="lateAllowed[]">
-			<br/>
-			<input type="text" placeholder="exit allowed" name="exitAllowed[]">
-			<br/>
-			<input type="text" placeholder="more submission allowed" name="moreAllowed[]">
-			<br/>
-			<input type="text" placeholder="late date allowed" name="lateDateAllowed[]">
-			<br/>
-			<br/>
-			</div>
-			<span id="editNoteSpan"> </span>
-			<button id="editNoteButton" type="button"> Add more students</button>
-
-			<input type="submit" value="Edit Note">
-		</form>
 
 
 		<p id="output"></p>

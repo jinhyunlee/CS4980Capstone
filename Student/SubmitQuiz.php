@@ -8,7 +8,8 @@
 	}
 	$quizID =  $_POST["quizID"];
 
-	require "../Login/CheckLogin.php";
+	require "../Login/Login.php";
+	checkRoster($quizID);
 
 	$cursor = $db->quizSubmission->find(array(
 			"studentID" => $MystudentID,

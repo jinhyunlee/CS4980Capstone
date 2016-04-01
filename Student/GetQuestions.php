@@ -1,5 +1,6 @@
 <?php
 
+	// Get the quiz ID
 	if (!isset($_POST["quizID"])) {
 		$object["success"] = false;
 		$object["message"][] = "quizID not given";
@@ -8,12 +9,12 @@
 	}
 	$quizID =  $_POST["quizID"];
 
-	require "../Login/CheckLogin.php";
+	// Check the login
+	require "../Login/Login.php";
+	checkRoster($quizID);
 
-	$cursor = $db->quizzes->find(array(
-		"quizID" => $quizID
-		));
 
+	// Set up the variables
 	$numSubmission = array();
 	$beginDate = array();
 	$beginTime = array();
@@ -24,6 +25,11 @@
 	$lateTime = array();
 	$question = array();
 
+
+	// Get the quiz information
+	$cursor = $db->quizzes->find(array(
+		"quizID" => $quizID
+		));
 
 	if ($cursor->count() > 0) {
 		foreach ($cursor as $document) {
@@ -40,18 +46,18 @@
 			$endDate = $document["endDate"];
 			$sectionNumber = $document["sectionNumber"];
 			$language = $document["language"];
+			continue;
 		}
 
 		$size = count($question);
 
-
+		// Current date
 		$currDate = date("Y-m-d");
 		$currTime = date("h:i:s");
 
 		// Get the begin and end date 
 		if (is_array($sectionNumber)) {
 			$index = array_search($MysectionNumber, $sectionNumber);
-
 			$MybeginDate = $beginDate[$index];
 			$MybeginTime = $beginTime[$index];
 			$MyendDate = $endDate[$index];
@@ -64,6 +70,7 @@
 			$MyendTime = $endTime;
 		}
 
+		// Allowed to take?
 		$allowed = false;
 		if ($MybeginDate < $currDate && $currDate < $MyendDate){
 			$allowed = true;
@@ -73,7 +80,7 @@
 				$allowed = true;
 			}
 			else {
-				$output["message"][] = "Can't take the quiz yet";	
+				$object["message"][] = "Can't take the quiz yet";	
 			}
 		}
 		else if ($currDate == $MyendDate) {
@@ -81,34 +88,34 @@
 				$allowed = true;
 			}
 			else {
-				$output["message"][] = "Too late to take the quiz";	
+				$object["message"][] = "Too late to take the quiz";	
 			}
 		}
 		else {
 			if ($MybeginDate > $currDate) {
-				$output["message"][] = "Can't take the quiz yet";	
+				$object["message"][] = "Can't take the quiz yet";	
 			}
 			else {
-				$output["message"][] = "Too late to take the quiz";
+				$object["message"][] = "Too late to take the quiz";
 			}	
 		}
 
-
+		// If allowed to take
 		if ($allowed) {
+			$object["message"][] = "You may take the quiz";
 
 			$cursor = $db->quizSubmission->find(array(
 				"studentID" => $MystudentID,
 				"quizID" => $quizID
 				));
 
-			// How many have they taken?
-			$taken = $cursor->count();
-
-
-
+			// How many have they taken? 
+			$taken = $cursor->count(); // if it is first time
+			$object["message"][] = "Taken: " . $taken;
 
 			// If taken more than once
 			if ($taken > 0) {
+				$object["message"][] = "You have taken it before";
 				$cursor = $db->quizSubmission->find(array(
 					"studentID" => $MystudentID,
 					"quizID" => $quizID,
@@ -118,10 +125,12 @@
 					$finished = $document["finished"];
 					$MystartTime = $document["startTime"];
 					$MystartDate = $document["startDate"];
+					continue;
 				}
 
 				// LOAD OLD - didn't finish yet
 				if (!$finished) {
+					$object["message"][] = "Have not finished the quiz";
 					$code = array();
 					$feedback = array();
 
@@ -129,18 +138,16 @@
 						$cursor = $db->submission->find(array(
 							"studentID" => $MystudentID,
 							"quizID" => $quizID,
-							"questionNumber" => $i
+							"questionNumber" => $i,
+							"try" => $taken
 							));
-
-						// Sort backwards
-						$cursor->sort(array(
-							"_id" => -1));
 
 						$tempCode = "";
 						$tempResult = "";
 
 						// If code is found for the particular question
 						if ($cursor->count() > 0) {
+							$object["message"][] = "Count: " . $cursor->count();
 							foreach($cursor as $document) {
 								if ($document["save"]) {
 									$tempCode = $document["code"];
@@ -149,45 +156,48 @@
 									$tempCode = $document["code"];
 									$tempResult = $document["result"];
 								}
-								continue;
 							}
 						}
 						$code[] = $tempCode;
 						$feedback[] = $tempResult;
+						$object["message"][] = "Temp code: " . $tempCode;
+						$object["message"][] = "Temp feedback: " . $tempResult;
+
 					}
 
-					$output["success"] = true;
-					$output["message"][] = "Success";
-					$output["continue"] = true;
+					$object["success"] = true;
+					$object["message"][] = "Success";
+					$object["continue"] = true;
 
-					$output["numSubmission"] = $numSubmission; // list
-					$output["question"] = $question; // list
-					$output["quizName"] = $quizName;
-					$output["timeAllowed"] = $timeAllowed * $MyextraTime;
-					$output["retake"] = $retake; // number of retakes allowed
+					$object["numSubmission"] = $numSubmission; // list
+					$object["question"] = $question; // list
+					$object["quizName"] = $quizName;
+					$object["timeAllowed"] = $timeAllowed * $MyextraTime;
+					$object["retake"] = $retake; // number of retakes allowed
 					if ($MyretakeAllowed) { // number of retakes left
-						$output["retakeLeft"] = "unlimited";	
+						$object["retakeLeft"] = "unlimited";	
 					}
 					else {
-						$output["retakeLeft"] = $retake - $taken;
+						$object["retakeLeft"] = $retake - $taken;
 					}
-					$output["language"] = $language;
-					$output["try"] = $taken; // how many times have they taken
-					$output["currTime"] = $currTime; // current time of server
-					$output["currDate"] = $currDate;
-					$output["startTime"] = $MystartTime;
-					$output["startDate"] = $MystartDate;
+					$object["language"] = $language;
+					$object["try"] = $taken; // how many times have they taken
+					$object["currTime"] = $currTime; // current time of server
+					$object["currDate"] = $currDate;
+					$object["startTime"] = $MystartTime;
+					$object["startDate"] = $MystartDate;
 
 
 					// Additional Outputs
-					$output["code"] = $code;
-					$output["feedback"] = $feedback;
+					$object["code"] = $code;
+					$object["feedback"] = $feedback;
 
-					$secondsAllowed = ($timeAllowed * $MyextraTime)*60;
+					$secondsAllowed = ($timeAllowed * $MyextraTime);
 					$dayDiff = 60 * 60 * 24 * (strtotime($currDate) - strtotime($MystartDate));
+					$object["message"][] = "day diff: " . $dayDiff;
 					$timeDiff = strtotime($currTime) - strtotime($MystartTime);
-
-					$output["timeLeft"] = $secondsAllowed - ($dayDiff + $timeDiff);
+					$object["message"][] = "time diff: " . $timeDiff;
+					$object["timeLeft"] = $secondsAllowed - ($dayDiff + $timeDiff);
 
 					$cursor = $db->quizSubmission->find(array(
 						"studentID" => $MystudentID,
@@ -208,7 +218,7 @@
 						"finished" => false),
 						$newdata);
 
-					echo json_encode($output);
+					echo json_encode($object);
 					exit;
 				}
 			}
@@ -217,6 +227,7 @@
 			// taken 0 -> 1
 			// taken 1 < 2 -> 2 < 2
 			if ($taken < $retake || $MyretakeAllowed) {
+				$object["message"][] = "You may take the NEW quiz";
 
 				$db->quizSubmission->insert(array(
 					"studentID" => $MystudentID,
@@ -231,48 +242,48 @@
 					"exitTime" => NULL
 					));
 
-				$output["success"] = true;
-				$output["continue"] = false;
-				$output["message"][] = "Success";
+				$object["success"] = true;
+				$object["continue"] = false;
+				$object["message"][] = "Success";
 
 
-				$output["numSubmission"] = $numSubmission; // list
-				$output["question"] = $question; // list
-				$output["quizName"] = $quizName;
+				$object["numSubmission"] = $numSubmission; // list
+				$object["question"] = $question; // list
+				$object["quizName"] = $quizName;
 
-				$output["timeAllowed"] = $timeAllowed * $MyextraTime;
+				$object["timeAllowed"] = $timeAllowed * $MyextraTime;
 
-				$output["retake"] = $retake; // number of retakes allowed
+				$object["retake"] = $retake; // number of retakes allowed
 				
 				if ($MyretakeAllowed) { // number of retakes left
-					$output["retakeLeft"] = "unlimited";	
+					$object["retakeLeft"] = "unlimited";	
 				}
 				else {
-					$output["retakeLeft"] = $retake - $taken - 1;
+					$object["retakeLeft"] = $retake - $taken - 1;
 				}
 
-				$output["language"] = $language;
-				$output["try"] = $taken + 1; // how many times have they taken
+				$object["language"] = $language;
+				$object["try"] = $taken + 1; // how many times have they taken
 
 				// If needed
-				$output["currTime"] = $currTime;
-				$output["currDate"] = $currDate;
-				$output["startTime"] = $currTime;
-				$output["startDate"] = $currDate;
+				$object["currTime"] = $currTime;
+				$object["currDate"] = $currDate;
+				$object["startTime"] = $currTime;
+				$object["startDate"] = $currDate;
 			}
 			else {
-				$output["success"] = false;
-				$output["message"][] = "Exceeded number of quizzes you can take";
+				$object["success"] = false;
+				$object["message"][] = "Exceeded number of quizzes you can take";
 			}
 		}
 	}
 	else {
-		$output["success"] = false;
-		$output["message"][] = "Did not find the quiz item";
+		$object["success"] = false;
+		$object["message"][] = "Did not find the quiz item";
 	}
 
 
-	echo json_encode($output);
+	echo json_encode($object);
 	
 
 ?>

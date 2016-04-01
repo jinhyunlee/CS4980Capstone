@@ -8,7 +8,8 @@
 	}
 	$quizID =  $_POST["quizID"];
 
-	require "../Login/CheckLogin.php";
+	require "../Login/Login.php";
+	checkRoster($quizID);
 
 
 	/* 	===============================================================
@@ -28,35 +29,53 @@
 
 	for ($i = 0; $i < count($code); $i++) {
 
-		$cursor = $db->submission->find(array(
+		$cursor = $db->quizSubmission->find(array(
 			"studentID" => $MystudentID,
 			"quizID" => $quizID,
-			"questionNumber" => $i+1,
-			"graded" => false
+			"finished" => false
 			));
 
-		if ($cursor->count() > 0) {
-			$db->submission->remove(array(
+		if ($cursor->count() == 0) {
+			$object["success"] = false;
+			$object["message"][] = "No quiz is going on";
+		}
+		else {
+			foreach ($cursor as $document) {
+				$taken = $document["try"];
+				continue;
+			}
+		
+			$cursor = $db->submission->find(array(
 				"studentID" => $MystudentID,
 				"quizID" => $quizID,
 				"questionNumber" => $i+1,
 				"graded" => false
 				));
-		}
-		$db->submission->insert(array(
-			"studentID" => $MystudentID,
-			"quizID" => $quizID, 
-			"questionNumber" => $i+1, 
-			"code" => $code[$i],
-			"submitTime" => $currTime,
-			"submitDate" => $currDate,
-			"result" => "",
-			"graded" => false,
-			"save" => true
-			));
 
-		$object["success"] = true;
-		$object["message"][] = "saved the quiz";
+			if ($cursor->count() > 0) {
+				$db->submission->remove(array(
+					"studentID" => $MystudentID,
+					"quizID" => $quizID,
+					"questionNumber" => $i+1,
+					"graded" => false
+					));
+			}
+			$db->submission->insert(array(
+				"studentID" => $MystudentID,
+				"quizID" => $quizID, 
+				"questionNumber" => $i+1, 
+				"code" => $code[$i],
+				"submitTime" => $currTime,
+				"submitDate" => $currDate,
+				"result" => "",
+				"graded" => false,
+				"save" => true,
+				"try" => $taken
+				));
+
+			$object["success"] = true;
+			$object["message"][] = "saved the quiz";
+		}
 	}
 	echo json_encode($object);
 

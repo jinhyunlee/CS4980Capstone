@@ -1,95 +1,76 @@
 import os
 import sys
-import subprocess32 as subprocess
+import subprocess
 import json
-	
+
+class Compiler:
+
+	def __init__(self, args):
+		self.output_data = {}
+		self.output_data.setdefault('standard_out', '')
+		self.output_data.setdefault('standard_error', '')
+		self.args = args
+		self.output_file = args[1] + '.out'
+
+	def compile(self):
+		if len(self.args) == 3:
+			try:
+				args = ['gcc', '-o', self.output_file, self.args[1], self.args[2]]
+				compile_process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				out, err = compile_process.communicate()
+				rc = compile_process.returncode
+				print 'return code is: ' + str(rc)
+
+				if rc != 0:
+					raise Exception
+				self.output_data['compile_message'] = 'program compiled successfully!'
+			except Exception as e:
+				self.output_data['compile_message'] = 'There was a compilation problem.'
+				print e
+		elif len(self.args) == 4:
+			try:
+				args = ['gcc', '-o', self.output_file, self.args[1], self.args[2]]
+				compile_process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				out, err = compile_process.communicate()
+				rc = compile_process.returncode
+				print 'return code is: ' + str(rc)
+				if rc != 0:
+					raise Exception
+				self.output_data['compile_message'] = 'Program compiled successfully!'
+			except Exception as e:
+				self.output_data['compile_message'] = 'There was a compilation problem.'
+				print e
+		else:
+			self.output_data['compile_message'] = 'Incorrect number of input parameters.'
+
+	def run(self):
+		try:
+			command = './' + self.output_file
+			sp = subprocess.Popen([command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			try:
+				out, err = sp.communicate()
+				self.output_data['standard_out'] = out
+				self.output_data['standard_error'] = err
+			except subprocess.TimeoutExpired:
+				sp.kill()
+				out, err = sp.communicate()
+				self.output_data['standard_out'] = out
+				self.output_data['standard_error'] = err
+		except Exception as e:
+			print 'hello'
+			self.output_data['standard_out'] = 'Run problem. Maybe the file did not compile?'
+
+	def clean(self):
+		os.remove(self.output_file)
+		self.output_file = self.args[1] + '.txt'
+		with open(self.output_file, 'w') as outfile:
+			json.dump(self.output_data, outfile)
+		# a+rwx
+		os.chmod(self.output_file, 0777)
 	
 if __name__ == "__main__":
-	num_args = len(sys.argv)
-	command = "./a.out"
-	output_data = {}
-	output_data['standard_out'] = ''
-	output_data['standard_error'] = ''
-	output_file = sys.argv[1] + '.out'
-	output_file = output_file.replace(".c", "")
-	command = "./" + output_file
-	# params = ['gcc', '-o', output_file, sys.argv[1], sys.argv[2]]
-	# sp = subprocess.Popen(params)
-	# sp.communicate()
-	if num_args == 3: # this file and param file
-		try:
-			#
-			# First attempt to compile
-			#
-			compile_process = subprocess.Popen(['gcc', sys.argv[1]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			out, err = compile_process.communicate()
-			rc = compile_process.returncode
-			print 'return code is: ' + str(rc)
-			if not rc == 0:
-				raise Exception
-			output_data['compile_message'] = 'program compiled successfully!'
-
-			# Then attempt to run
-			try:
-				sp = subprocess.Popen([command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-				try:
-					out, err = sp.communicate()
-					output_data['standard_out'] = out
-					output_data['standard_error'] = err
-				except TimeoutExpired:
-					sp.kill()
-					out, err = sp.communicate()
-					output_data['standard_out'] = out
-					output_data['standard_error'] = err
-			except Exception as e:
-				output_data['standard_out'] = 'run problem'
-		except Exception as e: 
-			output_data['compile_message'] = 'compile problem'
-
-	elif num_args == 4: # this file and 2 param files
-		try:
-			#
-			# First attempt to compile
-			#
-			os.putenv("TMPDIR", "/tmp")
-			args = ['gcc', '-o', output_file, sys.argv[1], sys.argv[2]]
-			compile_process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			out, err = compile_process.communicate()
-			rc = compile_process.returncode
-			#print out
-			#print err
-			#print os.environ
-			print 'return code is: ' + str(rc)
-			if not rc == 0:
-				raise Exception
-			output_data['compile_message'] = 'program compiled successfully!'
-
-			# Then attempt to run
-			try:
-
-				command = './' + output_file
-				sp = subprocess.Popen([command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-				try:
-					out, err = sp.communicate()
-					output_data['standard_out'] = out
-					output_data['standard_error'] = err
-				except subprocess.TimeoutExpired:
-					sp.kill()
-					out, err = sp.communicate()
-					output_data['standard_out'] = out
-					output_data['standard_error'] = err
-			except Exception as e:
-				output_data['standard_out'] = 'run problem'
-		except Exception as e: 
-			output_data['compile_message'] = 'compile problem'
-
-	else:
-		output_data['compile_message'] = 'not compiled. too many params'
-
-	rc = os.remove(output_file)
-	print 'remove rc: ' + str(rc)
-	output_txt = output_file.replace(".out", ".txt");
-	with open(output_txt, 'w') as outfile:
-		json.dump(output_data, outfile)
-	# a+rwx
-	os.chmod(output_txt, 0777)
+	os.putenv("TMPDIR", "/tmp")
+	compiler = Compiler(sys.argv)
+	compiler.compile()
+	compiler.run()
+	compiler.clean()
