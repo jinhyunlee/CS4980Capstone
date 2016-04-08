@@ -214,12 +214,13 @@
 			}
 			copied = 0;
 		});
+
 		//event listener for fullscreen change
 		if (document.addEventListener) {
-		    document.addEventListener('webkitfullscreenchange', exitTest, false);
-		    document.addEventListener('mozfullscreenchange', exitTest, false);
-		    document.addEventListener('fullscreenchange', exitTest, false);
-		    document.addEventListener('MSFullscreenChange', exitTest, false);
+		    document.addEventListener('webkitfullscreenchange', pauseTest, false);
+		    document.addEventListener('mozfullscreenchange', pauseTest, false);
+		    document.addEventListener('fullscreenchange', pauseTest, false);
+		    document.addEventListener('MSFullscreenChange', pauseTest, false);
 		    //document.addEventListener('unload', exitTest);
 		}
 		//save code every 10 seconds

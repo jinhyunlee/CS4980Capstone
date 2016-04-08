@@ -164,9 +164,9 @@ function getQuestions() {
 			    	console.log(data.timeAllowed);
 			       	timerTime =  Math.round(date/1000) + data.timeAllowed;
 			    }
-			    
-			    document.getElementById("numSubmission").innerHTML = "Submissions: " + data.numSubmitted[0] + "/" + data.numSubmission[0]
-	        	
+			    if (data.continue) {
+			    	document.getElementById("numSubmission").innerHTML = "Submissions: " + data.numSubmitted[0] + "/" + data.numSubmission[0]
+	        	}
 	        	clearInterval(myInterval);
 		       	myInterval = setInterval(myTimer, 1000);
 
@@ -182,6 +182,7 @@ function getQuestions() {
 
 //force full screen
 function requestFullScreen(element) {
+	inFullScreen = 1;
 	quizID = document.getElementById("quizIDInput").value;
 	getQuestions();
 	if (startQuiz == 1) {
