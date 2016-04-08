@@ -151,15 +151,17 @@ function getQuestions() {
 	        		if (data.continue) {
 	        			currentCode[i] = data.code[i];
 	        			currentFeedback[i] = data.feedback[i];
-	        			numSubmissions[i] = data.numSubmissions[i];
+	        			numSubmissions[i] = data.numSubmission[i];
 	        			numSubmitted[i] = data.numSubmitted[i];
 	        		}
 	        	}
 	       		var date = new Date().getTime();
 	        
 	        	if (data.timeLeft != null) {
+	        		console.log(data.timeLeft);
 		        	timerTime =  Math.round(date/1000) + data.timeLeft;
 			    } else {
+			    	console.log(data.timeAllowed);
 			       	timerTime =  Math.round(date/1000) + data.timeAllowed;
 			    }
 			    

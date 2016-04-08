@@ -47,9 +47,11 @@
 	chmod($studentFile, 0777);
 
 	if ($grade) {
-	$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
+		$object["message"][] = "graded";
+		$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	}
 	else {
+		$object["message"][] = "not graded";
 		$str = "python os-system-calls.py " . $studentFile . " " . $language;
 		//$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	}
