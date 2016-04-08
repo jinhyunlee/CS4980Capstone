@@ -22,6 +22,8 @@
 			$moreAllowed[] = $document["moreAllowed"];
 			$lateDateAllowed[] = $document["lateDateAllowed"];
 			$retakeAllowed[] = $document["retakeAllowed"];
+			$earlyAccessAllowed[] = $document["earlyAccessAllowed"];
+			$lateAccessAllowed[] = $document["lateAccessAllowed"];
 		}
 	
 		$object["success"] = true;
@@ -34,6 +36,8 @@
 		$object["moreAllowed"] = $moreAllowed;
 		$object["lateDateAllowed"] = $lateDateAllowed;
 		$object["retakeAllowed"] = $retakeAllowed;
+		$object["earlyAccessAllowed"] = $earlyAccessAllowed;
+		$object["lateAccessAllowed"] = $lateAccessAllowed;
 	}
 	else {
 		$object["success"] = false;

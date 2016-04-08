@@ -50,20 +50,27 @@
 	$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	}
 	else {
-		//$str = "python os-system-calls.py " . $studentFile . " C";
-		$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
+		$str = "python os-system-calls.py " . $studentFile . " " . $language;
+		//$str = "python os-system-calls.py " . $studentFile . " " . $gradeFile . " " . $language;
 	}
 	$execs = exec($str, $op);
 
-	$object["message"][] = getcwd();
-
 	//$outputFile = $quizID . $MystudentID . $questionNumber . ".txt";
 	$outputFile = $studentFile . ".txt";
-	$object["message"][] = "OUT: " . $outputFile;
 	if (file_exists($outputFile)) {
 		$object["success"] = true;
 		$object["message"][] = "results are found";
-		$object["result"] = file_get_contents($outputFile);
+		$res = file_get_contents($outputFile);
+		if ($grade) {
+			$resJSON = json_decode($res, true);
+			$object["result"] = $resJSON["compile_message"];
+			if (isset($resJSON["standard_out"])) {
+				$object["result"] = $object["result"] . "\n" . $resJSON["standard_out"];
+			}
+		}
+		else {
+			$object["result"] = file_get_contents($outputFile);
+		}
 	}
 	else {
 		$object["success"] = false;

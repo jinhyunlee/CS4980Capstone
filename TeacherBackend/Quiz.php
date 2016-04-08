@@ -56,6 +56,7 @@
 			$GLOBALS['db']->quizzes->remove(array(
 				"quizID" => $GLOBALS['quizID']
 				));
+			$GLOBALS['object']["message"][] = "deleted First";
 		}
 
 		$GLOBALS['db']->quizzes->insert(array(

@@ -1,16 +1,14 @@
 <?php
 
-	// CREATE NEW QUIZ ONLY NO EDIT
 	require "Quiz.php";
 
 	ini_set('auto_detect_line_endings', true);
-	$csv = "Quiz.csv";
 	// Check if csv is given
-	if (!isset($_POST["csv"])) {
-		$object["message"][] = "csv not given";
+	if (!isset($_POST["csv1"])) {
+		$object["message"][] = "csv 1 not given";
 	}
 	else {
-		$csv =  $_POST["csv"];
+		$csv =  $_POST["csv1"] . ".csv";
 	}
 
 	$file = fopen($csv, "r");
@@ -23,35 +21,28 @@
 	$retake = $line[4];
 	fclose($file);
 
-	$csv = "Quiz2.csv";
-	// Check if csv is given
 	if (!isset($_POST["csv2"])) {
-		$object["message"][] = "csv not given";
+		$object["message"][] = "csv 2 not given";
 	}
 	else {
-		$csv =  $_POST["csv2"];
+		$csv =  $_POST["csv2"] . ".csv";
 	}
 
 	$file = fopen($csv, "r");
-	$line = fgetcsv($file, 1024);
-
+	$line = fgetcsv($file);
 	while(!feof($file)) {
-		$line = fgetcsv($file, 1024);
-
+		$line = fgetcsv($file);
 		$question[] = $line[0];
 		$numSubmission[] = $line[1];
 		$answer[] = $line[2];
 	}
 	fclose($file);
 
-
-	$csv = "Quiz3.csv";
-	// Check if csv is given
 	if (!isset($_POST["csv3"])) {
-		$object["message"][] = "csv not given";
+		$object["message"][] = "csv 3 not given";
 	}
 	else {
-		$csv =  $_POST["csv3"];
+		$csv =  $_POST["csv3"] . ".csv";
 	}
 
 	$file = fopen($csv, "r");

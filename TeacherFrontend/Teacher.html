@@ -99,6 +99,16 @@
 
 		<br/>
 		<br/>
+		AUTO ROSTER ==========================================================
+		<br/>
+		<form action="../TeacherBackend/AutoCreateRoster.php" method="post">
+			<input type="text" placeholder="csv file name" name="csv"> .csv <br/>
+			<input type="text" placeholder="class id" name="classID">
+			<input type="submit" value="Create Roster">
+		</form>
+		
+		<br/>
+		<br/>
 		VIEW ROSTER ==========================================================
 		<br/>
 
@@ -111,6 +121,7 @@
 		<br/>
 
 		<form action="../TeacherBackend/CreateQuiz.php" method="post">
+			<input type="text" placeholder="quiz id" name="quizID"> NONE if new <br/>
 			<input type="text" placeholder="class id" name="classID">
 			<input type="text" placeholder="quiz name" name="quizName">
 			<input type="text" placeholder="time allowed" name="timeAllowed">
@@ -154,58 +165,23 @@
 
 		<br/>
 		<br/>
+		AUTO QUIZ ==========================================================
+		<br/>
+		<form action="../TeacherBackend/AutoCreateQuiz.php" method="post">
+			<input type="text" placeholder="csv file name 1" name="csv1"> .csv for quiz information<br/>
+			<input type="text" placeholder="csv file name 2" name="csv2"> .csv for quiz question<br/>
+			<input type="text" placeholder="csv file name 3" name="csv3"> .csv for quiz time<br/>
+			<input type="text" placeholder="quiz id" name="quizID"> NONE if new <br/>
+			<input type="submit" value="Create Quiz">
+		</form>
+		
+		<br/>
+		<br/>
 		VIEW QUIZ ==========================================================
 		<br/>
 
 		<input id="viewQuizID" placeholder="quiz id">
 		<button id="viewQuizButton"> View Quiz </button>
-
-		<br/>
-		<br/>
-		EDIT QUIZ ============================================================
-		<br/>
-
-		<form action="../TeacherBackend/CreateQuiz.php" method="post">
-			<input type="text" placeholder="quiz id" name="quizID">
-			<input type="text" placeholder="class id" name="classID">
-			<input type="text" placeholder="quiz name" name="quizName">
-			<input type="text" placeholder="time allowed" name="timeAllowed">
-			<input type="text" placeholder="language" name="language">
-			<input type="text" placeholder="retake amount" name="retake">
-			<br/>
-			<br/>
-
-			<div id="editQuizDiv1">
-			<input type="text" placeholder="num submission" name="numSubmission[]">
-			<br/>
-			<textarea placeholder="question" name="question[]" rows="10" cols="60"></textarea>
-			<textarea placeholder="answer code" name="answer[]" rows="10" cols="60"></textarea>
-			<br/>
-			<br/>
-			</div>
-			<span id="editQuizSpan1"> </span>
-			<button id="editQuizButton1" type="button"> Add more questions</button>
-			<div id="editQuizDiv2">
-			<input type="text" placeholder="section number" name="sectionNumber">
-			<br/>
-			Begin Datetime: 
-			<input type="date" name="beginDate">
-			<input type="time" name="beginTime">
-			<br/>
-			Late Datetime: 
-			<input type="date" name="lateDate">
-			<input type="time" name="lateTime">
-			<br/>
-			End Datetime:
-			<input type="date" name="endDate">
-			<input type="time" name="endTime">
-			<br/>
-			<br/>
-			</div>
-			<span id="editQuizSpan2"> </span>
-			<button id="editQuizButton2" type="button"> Add more sections </button>
-			<input type="submit" value="Edit Quiz">
-		</form>
 
 		<br/>
 		<br/>
@@ -231,6 +207,10 @@
 			<br/>
 			<input type="text" placeholder="late date allowed" name="lateDateAllowed[]">
 			<br/>
+			<input type="text" placeholder="Early access allowed" name="earlyAccessAllowed[]">
+			<br/>
+			<input type="text" placeholder="Late access allowed" name="lateAccessAllowed[]">
+			<br/>
 			<br/>
 			</div>
 			<span id="createNoteSpan"> </span>
@@ -239,6 +219,16 @@
 			<input type="submit" value="Create Note">
 		</form>
 
+		<br/>
+		<br/>
+		AUTO NOTE ==========================================================
+		<br/>
+		<form action="../TeacherBackend/AutoCreateNote.php" method="post">
+			<input type="text" placeholder="csv file name" name="csv"> .csv <br/>
+			<input type="text" placeholder="quiz id" name="quizID"> NONE if new <br/>
+			<input type="submit" value="Create Quiz">
+		</form>
+		
 		<br/>
 		<br/>
 		VIEW NOTE ==========================================================

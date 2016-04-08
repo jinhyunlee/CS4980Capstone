@@ -70,6 +70,16 @@
 			$MyendTime = $endTime;
 		}
 
+
+		$cursor = $db->allowed->find(array(
+			"quizID" => $quizID,
+			"studentID" => $MystudentID
+			));
+
+		if ($cursor->count() > 0) {
+			$MyearlyAccessAllowed = $document["earlyAccessAllowed"];
+			$MylateAccessAllowed = $document["lateAccessAllowed"];
+		}
 		// Allowed to take?
 		$allowed = false;
 		if ($MybeginDate < $currDate && $currDate < $MyendDate){
@@ -80,7 +90,12 @@
 				$allowed = true;
 			}
 			else {
-				$object["message"][] = "Can't take the quiz yet";	
+				if ($MyearlyAccessAllowed) {
+					$allowed = true;
+				}	
+				else {
+					$object["message"][] = "Can't take the quiz yet";
+				}
 			}
 		}
 		else if ($currDate == $MyendDate) {
@@ -88,15 +103,30 @@
 				$allowed = true;
 			}
 			else {
-				$object["message"][] = "Too late to take the quiz";	
+				if ($MylateAccessAllowed) {
+					$allowed = true;
+				}	
+				else {
+					$object["message"][] = "Too late to take the quiz";	
+				}
 			}
 		}
 		else {
 			if ($MybeginDate > $currDate) {
-				$object["message"][] = "Can't take the quiz yet";	
+				if ($MyearlyAccessAllowed) {
+					$allowed = true;
+				}	
+				else {
+					$object["message"][] = "Can't take the quiz yet";
+				}	
 			}
 			else {
-				$object["message"][] = "Too late to take the quiz";
+				if ($MylateAccessAllowed) {
+					$allowed = true;
+				}	
+				else {
+					$object["message"][] = "Too late to take the quiz";	
+				};
 			}	
 		}
 
@@ -133,8 +163,10 @@
 					$object["message"][] = "Have not finished the quiz";
 					$code = array();
 					$feedback = array();
+					$numSubmitted = array();
 
 					for ($i = 1; $i <= $size; $i++) {
+						$numSubmitted[$i-1] = 0;
 						$cursor = $db->submission->find(array(
 							"studentID" => $MystudentID,
 							"quizID" => $quizID,
@@ -155,6 +187,7 @@
 								else {
 									$tempCode = $document["code"];
 									$tempResult = $document["result"];
+									$numSubmitted[$i-1] = $numSubmitted[$i-1] + 1;
 								}
 							}
 						}
@@ -164,6 +197,7 @@
 						$object["message"][] = "Temp feedback: " . $tempResult;
 
 					}
+
 
 					$object["success"] = true;
 					$object["message"][] = "Success";
@@ -191,6 +225,7 @@
 					// Additional Outputs
 					$object["code"] = $code;
 					$object["feedback"] = $feedback;
+					$object["numSubmitted"] = $numSubmitted;
 
 					$secondsAllowed = ($timeAllowed * $MyextraTime);
 					$dayDiff = 60 * 60 * 24 * (strtotime($currDate) - strtotime($MystartDate));

@@ -12,8 +12,7 @@
 	$id = "admin"; // Instructor
 	$object["message"][] = $id . "wooo";
 
-
-
+	date_default_timezone_set('America/New_York');
 
 	// IP Address - TO DO:
 	$IPAddress = "111.111.1234";

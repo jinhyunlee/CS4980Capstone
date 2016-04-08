@@ -15,4 +15,12 @@ Prior to running:
 1. Run the server (I use apache web server from Manager-osx)
 2. Run mongo (Command Line: mongod)
 3. Run TeacherFrontend/Teacher.html - to populate data if needed
+	TO POPULATE:
+
+	1. Create Roster with ur class ID
+	2. Create Quiz with 3 CSV files
+		1. Quiz Information
+		2. Quiz Questions
+		3. Quiz Dates
+	3. Create Notes / Edit notes if needed
 4. Change NetBadge.php for change of student account

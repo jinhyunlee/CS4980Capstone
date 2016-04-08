@@ -1,1 +1,1 @@
-Student ID,Note,Late Allowed,Exit Allowed,More Allowed,Late Date Allowed,Retake Allowedbbb,All priv,TRUE,TRUE,TRUE,TRUE,TRUEccc,No priv,FALSE,FALSE,FALSE,FALSE,FALSEddd,All priv 2,TRUE,TRUE,TRUE,TRUE,TRUE
+Student ID,Note,Late Allowed,Exit Allowed,More Allowed,Late Date Allowed,Retake Allowed,Early Access,Late Accessbbb,All priv,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUEccc,No priv,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSEddd,All priv 2,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE

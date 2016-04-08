@@ -21,6 +21,8 @@
 	$moreAllowed = array();
 	$lateDateAllowed = array();
 	$retakeAllowed = array();
+	$earlyAccessAllowed = array();
+	$lateAccessAllowed = array();
 
 	function checkNotePostData() {
 
@@ -31,7 +33,9 @@
 			!isset($_POST["exitAllowed"]) ||
 			!isset($_POST["moreAllowed"]) ||
 			!isset($_POST["lateDateAllowed"]) ||
-			!isset($_POST["retakeAllowed"])) {
+			!isset($_POST["retakeAllowed"]) ||
+			!isset($_POST["earlyAccessAllowed"]) ||
+			!isset($_POST["lateAccessAllowed"])) {
 
 			$GLOBALS['object']["success"] = false;
 			$GLOBALS['object']["message"][] = "POST Data were not set";
@@ -46,6 +50,8 @@
 		$GLOBALS['moreAllowed'] = $_POST["moreAllowed"];
 		$GLOBALS['lateDateAllowed'] = $_POST["lateDateAllowed"];
 		$GLOBALS['retakeAllowed'] = $_POST["retakeAllowed"];
+		$GLOBALS['earlyAccessAllowed'] = $_POST["earlyAccessAllowed"];
+		$GLOBALS['lateAccessAllowed'] = $_POST["lateAccessAllowed"];
 
 		// TODO: Check for array length
 	}
@@ -79,7 +85,9 @@
 					"exitAllowed" => filter_var($GLOBALS['exitAllowed'][$i], FILTER_VALIDATE_BOOLEAN),
 					"moreAllowed" => filter_var($GLOBALS['moreAllowed'][$i], FILTER_VALIDATE_BOOLEAN),
 					"lateDateAllowed" => filter_var($GLOBALS['lateDateAllowed'][$i], FILTER_VALIDATE_BOOLEAN),
-					"retakeAllowed" => filter_var($GLOBALS['retakeAllowed'][$i], FILTER_VALIDATE_BOOLEAN)
+					"retakeAllowed" => filter_var($GLOBALS['retakeAllowed'][$i], FILTER_VALIDATE_BOOLEAN),
+					"earlyAccessAllowed" => filter_var($GLOBALS['earlyAccessAllowed'][$i], FILTER_VALIDATE_BOOLEAN),
+					"lateAccessAllowed" => filter_var($GLOBALS['lateAccessAllowed'][$i], FILTER_VALIDATE_BOOLEAN)
 					));
 			}
 

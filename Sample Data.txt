@@ -10,11 +10,11 @@ ANSWER 1:
 
 int main() {
     if (five() != 5) {
-        printf("Failed");
+        printf("Failed\n");
         fprintf(stderr, "Failed: Five() should be 5, but got %d\n", five());
     }
     else {
-        printf("Success");
+        printf("Success\n");
         fprintf(stderr, "Success: Five() is %d\n", five());
     }
     return 0;
@@ -36,20 +36,20 @@ ANSWER 2:
 
 int main() {
     if (absolute(-3) != 3) {
-        printf("Failed");
+        printf("Failed\n");
         fprintf(stderr, "Failed: absolute(-3) should be 3, but got %d\n", absolute(-3));
     }
     else {
-        printf("Success");
+        printf("Success\n");
         fprintf(stderr, "Success: absolute(-3) is %d\n", absolute(-3));
     }
 
     if (absolute(7) != 7) {
-        printf("Failed");
+        printf("Failed\n");
         fprintf(stderr, "Failed: absolute(7) should be 7, but got %d\n", absolute(7));
     }
     else {
-        printf("Success");
+        printf("Success\n");
         fprintf(stderr, "Success: absolute(7) is %d\n", absolute(7));
     }
     return 0;
